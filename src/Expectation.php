@@ -2,6 +2,8 @@
 
 namespace Guzzler;
 
+use PHPUnit\Framework\TestCase;
+
 class Expectation
 {
     protected $wrapper;
@@ -58,5 +60,16 @@ class Expectation
         $this->wrapper->queueResponse($response);
 
         return $this;
+    }
+
+    /**
+     * Iterate over the history and run assertions against it.
+     *
+     * @param TestCase $instance
+     * @param array $history
+     */
+    public function run(TestCase $instance, array $history): void
+    {
+
     }
 }

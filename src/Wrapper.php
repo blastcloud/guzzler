@@ -3,7 +3,9 @@
 namespace Guzzler;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use PHPUnit\Framework\TestCase;
 
 class Wrapper
@@ -11,6 +13,9 @@ class Wrapper
     protected $history = [];
 
     protected $handlerStack;
+
+    /** @var MockHandler */
+    protected $mockHandler;
 
     /** @var TestCase */
     protected $testInstance;
@@ -23,7 +28,12 @@ class Wrapper
     public function __construct(TestCase $testInstance)
     {
         $this->testInstance = $testInstance;
-        $this->handlerStack = HandlerStack::create();
+
+        $this->mockHandler = new MockHandler();
+        $this->handlerStack = HandlerStack::create($this->mockHandler);
+
+        $history = Middleware::history($this->history);
+        $this->handlerStack->push($history);
     }
 
     /**
@@ -33,7 +43,9 @@ class Wrapper
      */
     public function runExpectations()
     {
-
+        foreach ($this->expectations as $expectation) {
+            $expectation->run($this->testInstance, $this->history);
+        }
     }
 
     /**
@@ -67,7 +79,7 @@ class Wrapper
     public function queueResponse(): void
     {
         foreach (func_get_args() as $response) {
-
+            $this->mockHandler->append($response);
         }
     }
 
