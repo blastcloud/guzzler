@@ -1,0 +1,12 @@
+{
+    "require-dev": {
+        "php": "^7.0",
+        "phpunit/phpunit": "^8.0",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Guzzler\\": "src/"
+        }
+    }
+}
