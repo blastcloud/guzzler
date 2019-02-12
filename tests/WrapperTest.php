@@ -1,5 +1,7 @@
 <?php
 
+namespace tests;
+
 use PHPUnit\Framework\TestCase;
 use Guzzler\Wrapper;
 use GuzzleHttp\Client;
@@ -40,4 +42,10 @@ class WrapperTest extends TestCase
     {
         $this->assertInstanceOf(\GuzzleHttp\HandlerStack::class, $this->wrap->getHandlerStack());
     }
+
+    /*public function testQueueResponse()
+    {
+        $this->once();
+        $this->wrap->queueResponse(new \GuzzleHttp\Psr7\Response(200));
+    }*/
 }

@@ -2,6 +2,10 @@
 
 namespace Guzzler;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher;
 use PHPUnit\Framework\TestCase;
 
 class Expectation
@@ -9,26 +13,38 @@ class Expectation
     /** @var Wrapper */
     protected $wrapper;
     
-    protected $rules = [];
-    
-    /** @var Time */
+    /** @var Matcher\InvokedRecorder */
     protected $times;
 
-    public function __construct($times, Wrapper $wrapper)
+    /** @var string */
+    protected $endpoint;
+
+    /** @var string */
+    protected $method;
+
+    protected $headers = [];
+
+    /** @var string */
+    protected $body;
+
+    public function __construct(Matcher\InvokedRecorder $times, Wrapper $wrapper)
     {
+        $this->times = $times;
         $this->wrapper = $wrapper;
     }
 
     public function endpoint(string $uri, string $method)
     {
-        // set expectation
+        $this->endpoint = $uri;
+        $this->method = $method;
 
         return $this;
     }
 
     public function withHeader(string $key, $value = null)
     {
-        // Set expectation
+        $this->headers[$key] = $value;
+
         return $this;
     }
 
@@ -41,9 +57,9 @@ class Expectation
         return $this;
     }
 
-    public function withBody($body)
+    public function withBody(string $body)
     {
-        // Set expectation
+        $this->body = $body;
 
         return $this;
     }
@@ -76,8 +92,21 @@ class Expectation
      */
     public function __invoke(TestCase $instance, array $history): void
     {
-        foreach ($this->rules as $rule) {
-            $rule($history);
+        $invocations = array_filter($history, function($call) {
+            return $call['request']->getMethod() == $this->method
+                && $call['request']->getUri() == $this->endpoint;
+        });
+
+        foreach ($invocations as $i) {
+            $this->times->invoked(new ObjectInvocation(
+                Request::class,
+                'foo',
+                [],
+                Response::class,
+                $i
+            ));
         }
+
+        $this->times->verify();
     }
 }

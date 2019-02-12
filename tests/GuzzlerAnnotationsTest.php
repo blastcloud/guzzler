@@ -1,5 +1,7 @@
 <?php
 
+namespace tests;
+
 class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
 {
     use \Guzzler\Guzzler;

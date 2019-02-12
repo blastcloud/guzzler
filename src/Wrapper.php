@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\MockObject\Matcher;
 use PHPUnit\Framework\TestCase;
 
 class Wrapper
@@ -44,7 +46,7 @@ class Wrapper
     public function runExpectations()
     {
         foreach ($this->expectations as $expectation) {
-            $expectation->run($this->testInstance, $this->history);
+            $expectation($this->testInstance, $this->history);
         }
     }
 
@@ -88,9 +90,14 @@ class Wrapper
         return $this->history;
     }
 
-    public function expects($argument)
+    public function expects(Matcher\InvokedRecorder $argument)
     {
         $this->expectations[] = $expectation = new Expectation($argument, $this);
+
+        // Each expectation is an assertion, but because the assertion
+        // won't be tested until the @after method, we should add a
+        // count for each new expectation that will be asserted.
+        $this->testInstance->addToAssertionCount(1);
 
         return $expectation;
     }
