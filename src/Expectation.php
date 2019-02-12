@@ -3,7 +3,7 @@
 namespace Guzzler;
 
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
 use PHPUnit\Framework\MockObject\Matcher;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +26,8 @@ class Expectation
 
     /** @var string */
     protected $body;
+
+    protected $withs = [];
 
     public function __construct(Matcher\InvokedRecorder $times, Wrapper $wrapper)
     {
@@ -64,9 +66,9 @@ class Expectation
         return $this;
     }
 
-    public function with($something)
+    public function with(...$something)
     {
-        // Set expectation
+        $this->withs = $something;
 
         return $this;
     }
@@ -75,11 +77,28 @@ class Expectation
      * Set a follow through; either response, callable, or Exception.
      *
      * @param $response
+     * @param int $times
      * @return $this
      */
-    public function will($response)
+    public function will($response, int $times = 1)
     {
-        $this->wrapper->queueResponse($response);
+        for ($i = 0; $i < $times; $i++) {
+            $this->wrapper->queueResponse($response);
+        }
+
+        return $this;
+    }
+
+    /**
+     * An alias of 'will'.
+     *
+     * @param $response
+     * @param int $times
+     * @return $this
+     */
+    public function willRespond($response, int $times = 1)
+    {
+        $this->will($response, $times);
 
         return $this;
     }
@@ -98,15 +117,29 @@ class Expectation
         });
 
         foreach ($invocations as $i) {
-            $this->times->invoked(new ObjectInvocation(
-                Request::class,
-                'foo',
-                [],
-                Response::class,
-                $i
-            ));
+            $this->times->invoked(new ObjectInvocation('','',[],'',$i));
+
+            /** @var Request $request */
+            $request = $i['request'];
+
+            // Headers
+            foreach ($this->headers as $key => $value) {
+                $message = "Failed asserting that the header {$key} is equal to {$value}.";
+
+                if (is_array($value)) {
+                    Assert::assertEquals($value, $request->getHeader($key), $message);
+                    continue;
+                }
+
+                Assert::assertContains($value, $request->getHeader($key), $message);
+            }
+
+            if (!empty($this->body)) {
+                Assert::assertEquals($this->body, $request->getBody());
+            }
         }
 
+        // Invocation Counts
         $this->times->verify();
     }
 }

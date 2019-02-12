@@ -2,7 +2,8 @@
     "require-dev": {
         "php": "^7.0",
         "phpunit/phpunit": "^8.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

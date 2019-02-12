@@ -30,8 +30,7 @@ class ExpectationTest extends TestCase
     public function testInvocationPassing()
     {
         $this->guzzler->expects($this->once())
-            ->endpoint('/once', 'GET')
-            ->withHeaders(['Authorization' => 'Blah']);
+            ->endpoint('/once', 'GET');
 
         $this->guzzler->expects($this->atLeastOnce())
             ->endpoint('/at-least', 'POST');
@@ -47,5 +46,39 @@ class ExpectationTest extends TestCase
         $client->get('/once');
         $client->post('/at-least');
         $client->post('/at-least');
+    }
+
+    public function testWithHeaders()
+    {
+        $headers = [
+            'X-Something' => 'Special',
+            'host' => 'example.com'
+        ];
+
+        $this->guzzler->queueResponse(new Response(200));
+
+        $this->guzzler->expects($this->once())
+            ->endpoint('/url', 'GET')
+            ->withHeader('Auth', 'Fantastic')
+            ->withHeaders($headers);
+
+        $this->guzzler->getClient()->get('/url', [
+            'headers' => $headers + ['Auth' => 'Fantastic']
+        ]);
+    }
+
+    public function testWithBody()
+    {
+        $body = ['something' => 'some value'];
+
+        $this->guzzler->expects($this->once())
+            ->endpoint('/url', 'POST')
+            ->withBody(json_encode($body));
+
+        $this->guzzler->queueResponse(new Response(200));
+
+        $this->guzzler->getClient()->post('/url', [
+            'json' => $body
+        ]);
     }
 }

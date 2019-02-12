@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\MockObject\Matcher;
 use PHPUnit\Framework\TestCase;
 
@@ -14,6 +13,7 @@ class Wrapper
 {
     protected $history = [];
 
+    /** @var HandlerStack  */
     protected $handlerStack;
 
     /** @var MockHandler */
@@ -76,20 +76,35 @@ class Wrapper
     }
 
     /**
+     * Add a response to the mock queue. All responses
+     * will return in the order they are given.
      *
+     * @param mixed ...$arguments
      */
-    public function queueResponse(): void
+    public function queueResponse(...$arguments): void
     {
-        foreach (func_get_args() as $response) {
+        foreach ($arguments as $response) {
             $this->mockHandler->append($response);
         }
     }
 
+    /**
+     * Return the history stack Guzzle builds with each request/response.
+     *
+     * @return array
+     */
     public function getHistory(): array
     {
         return $this->history;
     }
 
+    /**
+     * Create a new Expectation instance on which various pieces of the
+     * request can be asserted against.
+     *
+     * @param Matcher\InvokedRecorder $argument
+     * @return Expectation
+     */
     public function expects(Matcher\InvokedRecorder $argument)
     {
         $this->expectations[] = $expectation = new Expectation($argument, $this);
