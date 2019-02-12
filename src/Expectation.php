@@ -6,9 +6,15 @@ use PHPUnit\Framework\TestCase;
 
 class Expectation
 {
+    /** @var Wrapper */
     protected $wrapper;
+    
+    protected $rules = [];
+    
+    /** @var Time */
+    protected $times;
 
-    public function __construct($argument, Wrapper $wrapper)
+    public function __construct($times, Wrapper $wrapper)
     {
         $this->wrapper = $wrapper;
     }
@@ -68,8 +74,10 @@ class Expectation
      * @param TestCase $instance
      * @param array $history
      */
-    public function run(TestCase $instance, array $history): void
+    public function __invoke(TestCase $instance, array $history): void
     {
-
+        foreach ($this->rules as $rule) {
+            $rule($history);
+        }
     }
 }
