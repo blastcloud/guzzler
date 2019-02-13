@@ -81,4 +81,16 @@ class ExpectationTest extends TestCase
             'json' => $body
         ]);
     }
+
+    public function testWithProtocol()
+    {
+        $this->guzzler->expects($this->once())
+            ->withVersion(2.0);
+
+        $this->guzzler->queueResponse(new Response(200));
+
+        $this->guzzler->getClient()->get('/aoweij', [
+            'version' => 2.0
+        ]);
+    }
 }

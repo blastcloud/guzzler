@@ -25,6 +25,9 @@ class Expectation
     /** @var string */
     protected $body;
 
+    /** @var string */
+    protected $protocol;
+
     protected $withs = [];
 
     protected $filters = [];
@@ -75,6 +78,15 @@ class Expectation
         $this->body = $body;
 
         $this->addFilter('body');
+
+        return $this;
+    }
+
+    public function withVersion($protocol)
+    {
+        $this->protocol = $protocol;
+
+        $this->addFilter('protocol');
 
         return $this;
     }
@@ -142,6 +154,12 @@ class Expectation
     protected function filterByBody(array $history) {
         return array_filter($history, function($call) {
             return $call['request']->getBody() == $this->body;
+        });
+    }
+
+    protected function filterByProtocol(array $history) {
+        return array_filter($history, function($call) {
+            return $call['request']->getProtocolVersion() == $this->protocol;
         });
     }
 
