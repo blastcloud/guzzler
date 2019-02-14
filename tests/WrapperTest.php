@@ -2,6 +2,11 @@
 
 namespace tests;
 
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Promise\FulfilledPromise;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Guzzler\Wrapper;
 use GuzzleHttp\Client;
@@ -43,9 +48,36 @@ class WrapperTest extends TestCase
         $this->assertInstanceOf(\GuzzleHttp\HandlerStack::class, $this->wrap->getHandlerStack());
     }
 
-    /*public function testQueueResponse()
+    public function testQueueResponseWithResponse()
     {
-        $this->once();
-        $this->wrap->queueResponse(new \GuzzleHttp\Psr7\Response(200));
-    }*/
+        $response = new Response(200, [], 'some special body');
+        $this->wrap->queueResponse($response);
+
+        $result = $this->wrap->getClient()->get('anything');
+
+        $this->assertEquals($response, $result);
+    }
+
+    public function testQueueResponseWithException()
+    {
+        $exception = new BadResponseException('You suck!', new Request('',''));
+        $this->wrap->queueResponse($exception);
+
+        $this->expectException(BadResponseException::class);
+
+        $this->wrap->getClient()->get('anything');
+    }
+
+    public function testQueueResponseWithPromise()
+    {
+        $promise = new Promise();
+        $this->wrap->queueResponse($promise);
+
+        $result = $this->wrap->getClient()->getAsync('somewhere');
+
+        $response = new Response(201, [], 'It was created!');
+        $promise->resolve($response);
+
+        $this->assertEquals($response, $result->wait());
+    }
 }

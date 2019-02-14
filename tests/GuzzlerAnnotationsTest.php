@@ -24,6 +24,6 @@ class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
         };
 
         // This is here just so the test isn't marked 'risky' and skipped.
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
     }
 }

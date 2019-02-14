@@ -3,10 +3,8 @@
 namespace tests;
 
 use PHPUnit\Framework\TestCase;
-use Guzzler\Guzzler;
 
 class GuzzlerTest extends TestCase {
-    use Guzzler;
 
     public function testBeforeAndAfterAnnotations()
     {
@@ -17,4 +15,5 @@ class GuzzlerTest extends TestCase {
 
         $this->assertEquals('after has run', GuzzlerAnnotationsTest::$afterWasRun);
     }
+
 }

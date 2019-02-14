@@ -28,8 +28,6 @@ class Expectation
     /** @var string */
     protected $protocol;
 
-    protected $withs = [];
-
     protected $filters = [];
 
     public function __construct(Matcher\InvokedRecorder $times, Wrapper $wrapper)
@@ -87,13 +85,6 @@ class Expectation
         $this->protocol = $protocol;
 
         $this->addFilter('protocol');
-
-        return $this;
-    }
-
-    public function with(...$something)
-    {
-        $this->withs = $something;
 
         return $this;
     }
