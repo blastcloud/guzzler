@@ -21,7 +21,7 @@ class SomeTest extends TestCase
 		parent::setUp();
 
 		$client = $this->guzzler->getClient(/** Any configs for a client */ [
-			‘base_uri’ => ‘https://example.com/api’
+			"base_uri" => "https://example.com/api"
 		]);
 		
 		// You can then inject this client object into your code or IOC container.
@@ -72,8 +72,8 @@ The `getClient` method returns a new instance of the Guzzle `Client` class and a
 
 ```php
 $client = $this->guzzler->getClient([
-	‘stream’ => true,
-	‘base_uri’ => ‘http://some-url.com/api/v2’
+	"stream" => true,
+	"base_uri" => "http://some-url.com/api/v2"
 ]);
 ```
 
