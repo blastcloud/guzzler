@@ -31,8 +31,8 @@ class SomeTest extends TestCase
     public function testSomethingWithExpectations()
     {
         $this->guzzler->expects($this->once())
-            ->post(‘/some-url’)
-            ->withHeader(‘X-Authorization’, ‘some-key’)
+            ->post("/some-url")
+            ->withHeader("X-Authorization", "some-key")
             ->willRespond(new Response(201));
     
         $this->classToTest->someMethod();
@@ -42,7 +42,7 @@ class SomeTest extends TestCase
     {
         $this->guzzler->queueResponse(
             new Response(204),
-            new \Exception(‘Some message’),
+            new \Exception("Some message"),
             // any needed responses to return from the client.
         );
     
@@ -50,7 +50,7 @@ class SomeTest extends TestCase
         // ... Some other number of calls
     
         $this->guzzler->assertAll(function (Expectation $ex) {
-            return $ex->withHeader(‘Authorization’, ‘some-key’);
+            return $ex->withHeader("Authorization", "some-key");
         });
     }
 }
@@ -94,7 +94,7 @@ If you’d rather create your own `Client` instance, you can instead return the 
 ```php
 $client = new Client([
     //... Some configs
-    ‘handler’ => $this->guzzler->getHandlerStack()
+    "handler" => $this->guzzler->getHandlerStack()
 ]);
 ```
 
@@ -105,7 +105,7 @@ $stack = $this->guzzler->getHandlerStack();
 $stack->push(new SomeOtherHandler());
 
 $client = new Client([
-    ‘handler’ => $stack
+    "handler" => $stack
 ]);
 ```
 
@@ -120,7 +120,7 @@ The `queueResponse` method is the main way to add responses to your mock handler
 ```php
 public function testSomething()
 {
-    $this->guzzler->queueResponse(new Response(201, [‘some-header’ => ‘value’], ‘some body’));
+    $this->guzzler->queueResponse(new Response(201, ["some-header" => "value"], "some body"));
     
     //... whatever the first request sent to your client is, the response above will be returned.
 }
@@ -149,19 +149,19 @@ If you are using expectations in your test, you can add responses to the expecta
 
 ```php
 $this->guzzler->expects($this->atLeast(9))
-    ->get(‘/some-uri’)
+    ->get("/some-uri")
     ->willRespond(new Response(200), 12);
 
 $this->guzzler->expects($this->once())
-    ->post(‘/another-uri’)
-    ->will(new \Exception(‘some message’));
+    ->post("/another-uri")
+    ->will(new \Exception("some message"));
 ```
 
 If you’d like to return different responses from the same expectation, you can still chain your `will()` or `willRespond()` statements.
 
 ```php
 $this->guzzler->expects($this->exactly(2))
-    ->endpoint(‘/a-url-for-deleting’, ‘DELETE’)
+    ->endpoint("/a-url-for-deleting", "DELETE")
     ->will(new Response(204))
     ->will(new Response(210));
 ```
@@ -189,14 +189,14 @@ To specify the endpoint and method used for an expectation, use the `endpoint()`
 
 ```php
 $this->guzzler->expects($this->once())
-    ->endpoint(‘/some-url’, ‘GET’);
+    ->endpoint("/some-url", "GET");
 ```
 
 The following convenience verb methods are also available to shorten your endpoint expectations. `get`, `post`, `put`, `delete`,  `patch`, `options`.
 
 ```php
 $this->guzzler->expects($this->any())
-    ->get(‘/a-url-for-getting’);
+    ->get("/a-url-for-getting");
 ```
 
 ### withHeader(string $key, string|array $value)
@@ -205,15 +205,15 @@ If you would like to expect a certain header to be on a request, you can provide
 
 ```php
 $this->guzzler->expects($this->once())
-    ->withHeader(‘Authorization’, ‘some-access-token’);
+    ->withHeader("Authorization", "some-access-token");
 ```
 
 You can also chain together multiple calls to `withHeader()` to individually add different headers. Headers can also be an array of values.
 
 ```php
 $this->guzzler->expects($this->once())
-    ->withHeader(‘Accept-Encoding’, [‘gzip’, ’deflate’])
-    ->withHeader(‘Accept’, ‘application/json’);
+    ->withHeader("Accept-Encoding", ["gzip", "deflate"])
+    ->withHeader("Accept", "application/json");
 ```
 
 ### withHeaders(array $headers)
@@ -223,8 +223,8 @@ As a shorthand for multiple `withHeader()` calls, you can pass an array of heade
 ```php
 $this->guzzler->expects($this->once())
     ->withHeaders([
-        ‘Accept-Encoding’ => [‘gzip’, ‘deflate’],
-        ‘Accept’ => ‘application/json’
+        "Accept-Encoding" => ["gzip", "deflate"],
+        "Accept" => "application/json"
     ]);
 ```
 
@@ -234,7 +234,7 @@ You can expect a certain body on any request by passing a `$body` string to the 
 
 ```php
 $this->guzzler->expects($this->once())
-    ->withBody(‘some body string’);
+    ->withBody("some body string");
 
 // Or, a json based request
     ->withBody(json_encode($someJsonableStructure));
@@ -287,9 +287,9 @@ Assertions can be made specifically against the first item in the client history
 
 ```php
 $this->guzzler->assertFirst( function ($expectation) {
-    return $expectation->post(‘/a-url’)
+    return $expectation->post("/a-url")
         ->withProtocol(1.1)
-        ->withHeader(‘XSRF’, ‘some-string’);
+        ->withHeader("XSRF", "some-string");
 });
 ```
 
@@ -299,7 +299,7 @@ Assertions can be made specifically against the last item in the client history.
 
 ```php
 $this->guzzler->assertLast(function ($expectation) {
-    return $expectation->get(‘/some-getter’);
+    return $expectation->get("/some-getter");
 });
 ```
 
@@ -309,7 +309,7 @@ Assertions can be made against any specific index of the client history. The fir
 
 ```php
 $this->guzzler->assertIndex(3, function ($expectation) {
-    return $expectation->post(‘/a-url’);
+    return $expectation->post("/a-url");
 });
 ```
 
@@ -319,7 +319,7 @@ Assertions can be made against any specific set of indexes in the client history
 
 ```php
 $this->guzzler->assertIndexes([2, 3, 6], function ($expectation) {
-    return $expectation->withBody(‘some body string’);
+    return $expectation->withBody("some body string");
 });
 ```
 
@@ -328,8 +328,8 @@ $this->guzzler->assertIndexes([2, 3, 6], function ($expectation) {
 This method can be used to assert that every request in the client’s history meets the expectation. For example, you may want to ensure that every request uses a certain authentication header. The first argument should be a closure that receives an `Expectation` and an optional error message as the second argument.
 
 ```php
-$this->guzzler->assertAll( function (Expectation $ex) use ($authHeader) {
-    return $ex->withHeader(‘Authorization’, $authHeader);
+$this->guzzler->assertAll(function (Expectation $ex) use ($authHeader) {
+    return $ex->withHeader("Authorization", $authHeader);
 });
 ```
 
@@ -348,8 +348,8 @@ The shape of Guzzle’s history stack is as follows:
 ```php
 $history = [
     [
-        ‘request’ 	=> Request object
-        ‘response’ => Response object
+        "request" 	=> GuzzleHttp\Psr7\Request   object
+        "response"  => GuzzleHttp\Psr7\Response  object
     ],
     // ...
 ];
