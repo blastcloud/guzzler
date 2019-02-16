@@ -131,7 +131,7 @@ class AssertionsTest extends TestCase
         $this->assertEquals($m, $r->getMessage());
     }
 
-    public function testAssertAllSuccess()
+    public function setUpAssertAll()
     {
         $this->guzzler->queueResponse(
             new Response(),
@@ -144,31 +144,28 @@ class AssertionsTest extends TestCase
 
         $this->client->get('woeij', $options);
         $this->client->get('aeice', $options);
+
+        return $options;
+    }
+
+    public function testAssertAllSuccess()
+    {
+        $options = $this->setUpAssertAll();
         $this->client->post('ceowu', $options);
 
-        $this->guzzler->assertAll(function ($e) use ($key, $value) {
-            return $e->withHeader($key, $value);
+        $this->guzzler->assertAll(function ($e) use ($options) {
+            return $e->withHeaders($options['headers']);
         });
     }
 
     public function testAssertAllFail()
     {
-        $this->guzzler->queueResponse(
-            new Response(),
-            new Response(),
-            new Response()
-        );
-
-        $key = 'Authorization'; $value = 'abdecfg';
-        $options = ['headers' => [$key => $value]];
-
-        $this->client->get('woeij', $options);
+        $options = $this->setUpAssertAll();
         $this->client->get('aeice');
-        $this->client->post('ceowu', $options);
 
-        $r = $this->catchAnything(function () use ($key, $value) {
-            $this->guzzler->assertAll(function ($e) use ($key, $value) {
-                return $e->withHeader($key, $value);
+        $r = $this->catchAnything(function () use ($options) {
+            $this->guzzler->assertAll(function ($e) use ($options) {
+                return $e->withHeaders($options['headers']);
             });
         });
 
@@ -176,10 +173,12 @@ class AssertionsTest extends TestCase
 
         // With custom message
         $message = 'aoiucoewuewknoih';
-        $p = $this->catchAnything(function () use ($key, $value, $message) {
-            $this->guzzler->assertAll(function ($e) use ($key, $value, $message) {
-                return $e->withHeader($key, $value);
+        $p = $this->catchAnything(function () use ($options, $message) {
+            $this->guzzler->assertAll(function ($e) use ($options, $message) {
+                return $e->withHeaders($options['headers']);
             }, $message);
         });
+
+        $this->assertEquals($message, $p->getMessage());
     }
 }
