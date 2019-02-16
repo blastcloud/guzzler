@@ -4,14 +4,14 @@ namespace tests;
 
 class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
 {
-    use \Guzzler\Guzzler;
+    use \Guzzler\UsesGuzzler;
 
     public static $afterWasRun;
 
     public function testWrapperIsSetupBeforeTest(): void
     {
         $this->assertObjectHasAttribute('guzzler', $this);
-        $this->assertInstanceOf(\Guzzler\Wrapper::class, $this->guzzler);
+        $this->assertInstanceOf(\Guzzler\Guzzler::class, $this->guzzler);
     }
 
     public function testExpectationsAreRunAfter()

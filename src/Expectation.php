@@ -3,37 +3,47 @@
 namespace Guzzler;
 
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
-use PHPUnit\Framework\MockObject\Matcher;
+use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class Expectation
+ * @package Guzzler
+ * @method $this get(string $uri)
+ * @method $this post(string $uri)
+ * @method $this put(string $uri)
+ * @method $this delete(string $uri)
+ * @method $this patch(string $uri)
+ * @method $this options(string $uri)
+ */
 class Expectation
 {
-    /** @var Wrapper */
-    protected $wrapper;
-    
-    /** @var Matcher\InvokedRecorder */
-    protected $times;
+    use Filters;
 
-    /** @var string */
-    protected $endpoint;
-
-    /** @var string */
-    protected $method;
-
-    protected $headers = [];
-
-    /** @var string */
-    protected $body;
-
-    /** @var string */
-    protected $protocol;
+    /** @var Guzzler */
+    protected $guzzler;
 
     protected $filters = [];
 
-    public function __construct(Matcher\InvokedRecorder $times, Wrapper $wrapper)
+    /** @var InvokedRecorder */
+    protected $times;
+
+    /**
+     * Each value in this array becomes a convenience method over endpoint().
+     */
+    public const VERBS = [
+        'get', 'post', 'put', 'delete', 'patch', 'options'
+    ];
+
+    /**
+     * Expectation constructor.
+     * @param null|InvokedRecorder $times
+     * @param null|Guzzler $guzzler
+     */
+    public function __construct($times = null, $guzzler = null)
     {
         $this->times = $times;
-        $this->wrapper = $wrapper;
+        $this->guzzler = $guzzler;
     }
 
     protected function addFilter($filter)
@@ -51,6 +61,22 @@ class Expectation
         $this->addFilter('endpoint');
 
         return $this;
+    }
+
+    /**
+     * This is used exclusively for the convenience verb methods.
+     *
+     * @param string $name
+     * @param $arguments
+     * @return $this
+     */
+    public function __call($name, $arguments)
+    {
+        if (!in_array($name, self::VERBS)) {
+            throw new \Error(sprintf("Call to undefined method %s::%s()",__CLASS__, $name));
+        }
+
+        return $this->endpoint($arguments[0], strtoupper($name));
     }
 
     public function withHeader(string $key, $value = null)
@@ -99,7 +125,7 @@ class Expectation
     public function will($response, int $times = 1)
     {
         for ($i = 0; $i < $times; $i++) {
-            $this->wrapper->queueResponse($response);
+            $this->guzzler->queueResponse($response);
         }
 
         return $this;
@@ -119,39 +145,13 @@ class Expectation
         return $this;
     }
 
-    protected function filterByEndpoint(array $history)
+    protected function runFilters(array $history)
     {
-        return array_filter($history, function($call) {
-            return $call['request']->getMethod() == $this->method
-                && $call['request']->getUri() == $this->endpoint;
-        });
-    }
+        foreach ($this->filters as $filter) {
+            $history = $this->{'filterBy' . ucfirst($filter)}($history);
+        }
 
-    protected function filterByHeaders(array $history)
-    {
-        return array_filter($history, function($call) {
-            foreach ($this->headers as $key => $value) {
-                $header = $call['request']->getHeader($key);
-
-                if ($header != $value && !in_array($value, $header)) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    }
-
-    protected function filterByBody(array $history) {
-        return array_filter($history, function($call) {
-            return $call['request']->getBody() == $this->body;
-        });
-    }
-
-    protected function filterByProtocol(array $history) {
-        return array_filter($history, function($call) {
-            return $call['request']->getProtocolVersion() == $this->protocol;
-        });
+        return $history;
     }
 
     /**
@@ -162,12 +162,8 @@ class Expectation
      */
     public function __invoke(TestCase $instance, array $history): void
     {
-        foreach ($this->filters as $filter) {
-            $history = $this->{'filterBy'.ucfirst($filter)}($history);
-        }
-
-        foreach ($history as $i) {
-            $this->times->invoked(new ObjectInvocation('','',[],'',$i['request']));
+        foreach ($this->runFilters($history) as $i) {
+            $this->times->invoked(new ObjectInvocation('', '', [], '', $i['request']));
         }
 
         // Invocation Counts

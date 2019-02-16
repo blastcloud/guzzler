@@ -3,11 +3,12 @@
 namespace tests;
 
 use GuzzleHttp\Psr7\Response;
+use Guzzler\Expectation;
 use PHPUnit\Framework\TestCase;
 
 class ExpectationTest extends TestCase
 {
-    use \Guzzler\Guzzler;
+    use \Guzzler\UsesGuzzler;
 
     /** @var \GuzzleHttp\Client */
     public $client;
@@ -25,6 +26,9 @@ class ExpectationTest extends TestCase
             ->endpoint('/somewhere', 'GET');
 
         $this->assertInstanceOf(\Guzzler\Expectation::class, $result);
+        $this->guzzler->queueResponse(new Response(200));
+
+        $this->client->get('/somewhere-else');
     }
 
     public function testInvocationPassing()
@@ -35,18 +39,18 @@ class ExpectationTest extends TestCase
         $this->guzzler->expects($this->atLeastOnce())
             ->endpoint('/at-least', 'POST');
 
-        $client = $this->guzzler->getClient();
-
         $this->guzzler->queueResponse(
             new Response(200),
             new Response(200),
             new Response(200)
         );
 
-        $client->get('/once');
-        $client->post('/at-least');
-        $client->post('/at-least');
+        $this->client->get('/once');
+        $this->client->post('/at-least');
+        $this->client->post('/at-least');
     }
+
+    //public function
 
     public function testWithHeaders()
     {
@@ -62,7 +66,7 @@ class ExpectationTest extends TestCase
             ->withHeader('Auth', 'Fantastic')
             ->withHeaders($headers);
 
-        $this->guzzler->getClient()->get('/url', [
+        $this->client->get('/url', [
             'headers' => $headers + ['Auth' => 'Fantastic']
         ]);
     }
@@ -77,7 +81,7 @@ class ExpectationTest extends TestCase
 
         $this->guzzler->queueResponse(new Response(200));
 
-        $this->guzzler->getClient()->post('/url', [
+        $this->client->post('/url', [
             'json' => $body
         ]);
     }
@@ -89,8 +93,25 @@ class ExpectationTest extends TestCase
 
         $this->guzzler->queueResponse(new Response(200));
 
-        $this->guzzler->getClient()->get('/aoweij', [
+        $this->client->get('/aoweij', [
             'version' => 2.0
         ]);
+    }
+
+    public function testUnknownConvenienceVerb()
+    {
+        $this->expectException(\Error::class);
+
+        $this->guzzler->expects($this->never())
+            ->something('/a-url');
+    }
+
+    public function testEachConvenienceVerbMethodDoesntErr()
+    {
+        $expectation = $this->guzzler->expects($this->never());
+
+        foreach (Expectation::VERBS as $verb) {
+            $expectation->$verb('/a-url');
+        }
     }
 }
