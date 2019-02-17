@@ -12,6 +12,8 @@ trait Filters
 
     protected $headers = [];
 
+    protected $options = [];
+
     /** @var string */
     protected $body;
 
@@ -74,6 +76,27 @@ trait Filters
     protected function filterByProtocol(array $history) {
         return array_filter($history, function($call) {
             return $call['request']->getProtocolVersion() == $this->protocol;
+        });
+    }
+
+    /**
+     * Narrow to only those history items with the specified options.
+     *
+     * @param array $history
+     * @return array
+     */
+    protected function filterByOptions(array $history)
+    {
+        return array_filter($history, function($call) {
+            foreach ($this->options as $key => $value) {
+                $option = $call['options'][$key] ?? null;
+
+                if ($option != $value) {
+                    return false;
+                }
+            }
+
+            return true;
         });
     }
 }

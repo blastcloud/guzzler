@@ -79,7 +79,7 @@ class Expectation
         return $this->endpoint($arguments[0], strtoupper($name));
     }
 
-    public function withHeader(string $key, $value = null)
+    public function withHeader(string $key, $value)
     {
         $this->headers[$key] = $value;
 
@@ -92,6 +92,24 @@ class Expectation
     {
         foreach ($headers as $key => $value) {
             $this->withHeader($key, $value);
+        }
+
+        return $this;
+    }
+
+    public function withOption(string $key, $value)
+    {
+        $this->options[$key] = $value;
+
+        $this->addFilter('options');
+
+        return $this;
+    }
+
+    public function withOptions(array $options)
+    {
+        foreach ($options as $key => $value) {
+            $this->withOption($key, $value);
         }
 
         return $this;

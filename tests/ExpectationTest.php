@@ -106,6 +106,23 @@ class ExpectationTest extends TestCase
         ]);
     }
 
+    public function testWithOptions()
+    {
+        $this->guzzler->queueMany(new Response(), 2);
+
+        $this->client->get('/woewij', ['stream' => true]);
+
+        $this->guzzler->assertFirst(function (Expectation $e) {
+            return $e->withOption('stream', true);
+        });
+
+        $options = ['verify' => false, 'allow_redirects' => false];
+        $this->guzzler->expects($this->once())
+            ->withOptions($options);
+
+        $this->client->get('/woei', $options);
+    }
+
     public function testUnknownConvenienceVerb()
     {
         $this->expectException(\Error::class);

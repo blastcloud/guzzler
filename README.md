@@ -217,7 +217,7 @@ $this->guzzler->expects($this->once())
     ->withHeader("Authorization", "some-access-token");
 ```
 
-You can also chain together multiple calls to `withHeader()` to individually add different headers. Headers can also be an array of values.
+You can chain together multiple calls to `withHeader()` to individually add different headers. Headers can also be an array of values.
 
 ```php
 $this->guzzler->expects($this->once())
@@ -256,6 +256,36 @@ You can expect a certain HTTP protocol (1.0, 1.1, 2.0) using the `withProtocol()
 ```php
 $this->guzzler->expects($this->once())
     ->withProtocol(2.0);
+```
+
+### withOption(string $name, string $value)
+
+You can expect a certain Guzzle Client option by passing a name and value to this method.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withOption('stream', true);
+```
+
+You can chain together multiple calls to `withOption` to individually add more option values.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withOption('stream', true)
+    ->withOption('allow_redirects', false);
+```
+
+### withOptions(array $options)
+
+As a shorthand for multiple `withOption()` calls, you can pass an array of option keys and values to `withOptions()`.
+
+```php
+$this->guzzler->expects($this->once())
+    ->withOptions([
+        'stream' => true,
+        'verify' => false,
+        'allow_redirects' => false
+    ]);
 ```
 
 ## Assertions
