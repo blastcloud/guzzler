@@ -388,7 +388,9 @@ The shape of Guzzle’s history stack is as follows:
 $history = [
     [
         "request"  => GuzzleHttp\Psr7\Request   object
-        "response" => GuzzleHttp\Psr7\Response  object
+        "response" => GuzzleHttp\Psr7\Response  object,
+        "options"  => array,
+        "errors"   => array
     ],
     // ...
 ];
