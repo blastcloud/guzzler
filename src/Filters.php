@@ -91,7 +91,7 @@ trait Filters
             foreach ($this->options as $key => $value) {
                 $option = $call['options'][$key] ?? null;
 
-                if ($option != $value) {
+                if ($option !== $value) {
                     return false;
                 }
             }

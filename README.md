@@ -373,17 +373,28 @@ $this->guzzler->assertAll(function (Expectation $ex) use ($authHeader) {
 });
 ```
 
+### assertNone(Closure $expect, $message = null)
+
+This method can be used to assert that no request, given that any have been made, meet the expectation.
+
+```php
+$this->guzzler->assertNone(function ($expect) {
+    return $expect->delete("/some-dangerous-thing-to-delete");
+});
+```
+
 ## Helpers
 
-### getHistory()
+### getHistory(?int $index, $subIndex = null)
 
 To retrieve the client’s raw history, this method can be used.
 
 ```php
 $history = $this->guzzler->getHistory();
+// Returns the entire history array
 ```
 
-The shape of Guzzle’s history stack is as follows:
+The shape of Guzzle’s history array is as follows:
 
 ```php
 $history = [
@@ -395,6 +406,28 @@ $history = [
     ],
     // ...
 ];
+```
+
+Individual indexes and sub-indexes of the request can also be requested directly.
+
+```php
+$second = $this->guzzler->getHistory(1);
+/**
+* [
+*   'request'  => object
+*   'response' => object
+*   'options'  => array
+*   'errors'   => array
+* ]
+*/
+
+$options = $this->guzzler->getHistory(4, 'options');
+/**
+* [
+*   'stream' => true,
+*   // ...
+* ]
+*/
 ```
 
 ### queueCount()

@@ -108,11 +108,19 @@ class Guzzler
     /**
      * Return the history stack Guzzle builds with each request/response.
      *
-     * @return array
+     * @param int|null $index
+     * @param string|null $subIndex
+     * @return mixed
      */
-    public function getHistory(): array
+    public function getHistory(?int $index = null, $subIndex = null)
     {
-        return $this->history;
+        if ($index == null) {
+            return $this->history;
+        }
+
+        return ($subIndex == null)
+            ? $this->history[$index]
+            : $this->history[$index][$subIndex];
     }
 
     /**

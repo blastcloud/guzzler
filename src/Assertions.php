@@ -38,7 +38,7 @@ trait Assertions
      */
     public function assertHistoryCount(int $count, $message = null)
     {
-        $r = $count > 1 ? 'requests' : 'request';
+        $r = $count == 1 ? 'request' : 'requests';
 
         $this->assert(
             count($this->history) == $count,
@@ -55,7 +55,7 @@ trait Assertions
     {
         return array_map(function ($i) {
             if (!isset($this->history[$i])) {
-                throw new UndefinedIndexException("Guzzle history does not have a {$i} index.");
+                throw new UndefinedIndexException("Guzzle history does not have a [{$i}] index.");
             }
 
             return $this->history[$i];
@@ -164,7 +164,18 @@ trait Assertions
 
         $this->assert(
             empty($diff),
-            $message ?? "Failed asserting that indexes ".implode(',', $diff)." met expectations."
+            $message ?? "Failed asserting that indexes [".implode(',', $diff)."] met expectations."
+        );
+    }
+
+    public function assertNone(\Closure $closure, $message = null)
+    {
+        $h = $this->runClosure($this->history, $closure);
+
+        $this->assert(
+            empty($h),
+            $message ?? 'Failed asserting that no history items met expectations. '.
+                'Indexes ['.implode(',', array_keys($h)).'] met expectations.'
         );
     }
 }

@@ -7,6 +7,7 @@ use Guzzler\Expectation;
 use Guzzler\UndefinedIndexException;
 use Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 
 class AssertionsTest extends TestCase
@@ -25,16 +26,6 @@ class AssertionsTest extends TestCase
         parent::setUp();
 
         $this->client = $this->guzzler->getClient();
-    }
-
-    public function catchAnything($callable)
-    {
-        try {
-            $callable();
-            return null;
-        } catch (\Exception | \Error $e) {
-            return $e;
-        }
     }
 
     public function setUpHistory()
@@ -58,23 +49,25 @@ class AssertionsTest extends TestCase
         $this->guzzler->assertNoHistory();
     }
 
-    public function testAssertNoHistoryFails()
+    public function testAssertNoHistoryFailsDefaultMessage()
     {
         $this->setUpHistory();
 
-        $res = $this->catchAnything(function () {
-            $this->guzzler->assertNoHistory();
-        });
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bno history\b/");
 
-        $this->assertNotNull($res);
+        $this->guzzler->assertNoHistory();
+    }
 
-        // With message provided.
+    public function testAssertNoHistoryFailsCustomMessage()
+    {
+        $this->setUpHistory();
+
         $message = 'some special message';
-        $resWithMessage = $this->catchAnything(function () use ($message) {
-            $this->guzzler->assertNoHistory($message);
-        });
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($message);
 
-        $this->assertEquals($message, $resWithMessage->getMessage());
+        $this->guzzler->assertNoHistory($message);
     }
 
     public function testAssertHistoryCountPasses()
@@ -84,20 +77,31 @@ class AssertionsTest extends TestCase
         $this->guzzler->assertHistoryCount($this->setUpHistory());
     }
 
-    public function testAssertHistoryCountFails()
+    public function testAssertHistoryCountFailsDefaultMessageOneRequest()
     {
-        $res = $this->catchAnything(function () {
-            $this->guzzler->assertHistoryCount(6);
-        });
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\b1 request\b/");
 
-        $this->assertNotNull($res->getMessage());
+        $this->guzzler->assertHistoryCount(1);
+    }
 
+    public function testAssertHistoryCountFailsDefaultMessageMultipleRequests()
+    {
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\b0 requests\b/");
+
+        $this->setUpHistory();
+        $this->guzzler->assertHistoryCount(0);
+    }
+
+    public function testAssertHistoryCountFailsCustomMessage()
+    {
         $message = 'my message';
-        $res = $this->catchAnything(function () use ($message) {
-            $this->guzzler->assertHistoryCount(3, $message);
-        });
 
-        $this->assertEquals($message, $res->getMessage());
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\b{$message}\b/");
+
+        $this->guzzler->assertHistoryCount(3, $message);
     }
 
     public function testAssertFirstPasses()
@@ -113,23 +117,25 @@ class AssertionsTest extends TestCase
     {
         $this->setUpHistory();
 
-        $r = $this->catchAnything(function () {
-            $this->guzzler->assertFirst(function ($e) {
-                return $e->post('/a-url');
-            });
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bfirst\b/");
+
+        $this->guzzler->assertFirst(function ($e) {
+            return $e->post('/a-url');
         });
+    }
 
-        $this->assertNotNull($r);
+    public function testAssertFirstFailsCustomMessage()
+    {
+        $this->setUpHistory();
 
-        // Custom Message
         $m = 'the special message';
-        $r = $this->catchAnything(function () use ($m) {
-            $this->guzzler->assertFirst(function ($e) {
-               return $e->post('/a-url');
-            }, $m);
-        });
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($m);
 
-        $this->assertEquals($m, $r->getMessage());
+        $this->guzzler->assertFirst(function ($e) {
+           return $e->post('/a-url');
+        }, $m);
     }
 
     public function testAssertAllSuccess()
@@ -144,35 +150,40 @@ class AssertionsTest extends TestCase
     public function testAssertAllEmpty()
     {
         $this->expectException(UndefinedIndexException::class);
+        $this->expectExceptionMessageRegExp("/\bempty\b/");
         $this->guzzler->assertAll(function ($e) {});
     }
 
-    public function testAssertAllFail()
+    public function testAssertAllFailDefaultMessage()
     {
         $this->setUpHistory();
 
-        $r = $this->catchAnything(function () {
-            $this->guzzler->assertAll(function ($e) {
-                return $e->get('/a-url');
-            });
+        $this->expectException(AssertionFailedError::class);
+        // Should include indexes of failed history items
+        $this->expectExceptionMessageRegExp("/\b[1,2,3,4,5,6]\b/");
+        $this->guzzler->assertAll(function ($e) {
+            return $e->get('/a-url');
         });
+    }
 
-        $this->assertNotNull($r);
+    public function testAssertAllFailCustomMessage()
+    {
+        $this->setUpHistory();
 
-        // With custom message
         $message = 'aoiucoewuewknoih';
-        $p = $this->catchAnything(function () use ($message) {
-            $this->guzzler->assertAll(function ($e) {
-                return $e->get('/a-url');
-            }, $message);
-        });
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($message);
 
-        $this->assertEquals($message, $p->getMessage());
+        $this->guzzler->assertAll(function ($e) {
+            return $e->get('/a-url');
+        }, $message);
     }
 
     public function testAssertIndexUndefined()
     {
         $this->expectException(UndefinedIndexException::class);
+        // Should include the index number of failure
+        $this->expectExceptionMessageRegExp("/\b[7]\b/");
         $this->guzzler->assertIndexes([7], function ($e){});
     }
 
@@ -183,5 +194,64 @@ class AssertionsTest extends TestCase
         $this->guzzler->assertLast(function ($e) {
             return $e->get('/a-different-url');
         });
+    }
+
+    public function testAssertLastFailsDefaultMessage()
+    {
+        $this->setUpHistory();
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\blast request\b/");
+
+        $this->guzzler->assertLast(function ($e) {
+            return $e->post('/aowiej');
+        });
+    }
+
+    public function testAssertLastFailsCustomMessage()
+    {
+        $this->setUpHistory();
+
+        $message = 'aoweijcemhoiwe';
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($message);
+
+        $this->guzzler->assertLast(function ($e) {
+           return $e->options('/aoweij');
+        }, $message);
+    }
+
+    public function testAssertNonePasses()
+    {
+        $this->setUpHistory();
+
+        $this->guzzler->assertNone(function ($e) {
+           return $e->withOption('verify', false);
+        });
+    }
+
+    public function testAssertNoneFailsDefaultMessage()
+    {
+        $this->setUpHistory();
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\b[3]\b/");
+
+        $this->guzzler->assertNone(function ($e) {
+            return $e->delete('/a-url');
+        });
+    }
+
+    public function testAssertNoneFailsCustomMessage()
+    {
+        $this->setUpHistory();
+
+        $message = 'The hills are alive with the sound of music.';
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($message);
+
+        $this->guzzler->assertNone(function ($e) {
+            return $e->delete('/a-url');
+        }, $message);
     }
 }

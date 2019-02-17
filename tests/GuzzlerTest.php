@@ -68,11 +68,7 @@ class GuzzlerTest extends TestCase
     {
         $this->assertEquals(0, $this->guzzler->queueCount());
 
-        $this->guzzler->queueResponse(
-            new Response(),
-            new Response(),
-            new Response()
-        );
+        $this->guzzler->queueMany(new Response(), 3);
 
         $this->assertEquals(3, $this->guzzler->queueCount());
     }
@@ -81,10 +77,30 @@ class GuzzlerTest extends TestCase
     {
         $this->assertEmpty($this->guzzler->getHistory());
 
-        $this->guzzler->queueResponse(new Response());
-        $this->guzzler->getClient()->get('anything');
+        $this->guzzler->queueMany(new Response(), 3);
+        $client = $this->guzzler->getClient();
+        $client->get('anything');
+        $client->post('anything');
+        $client->put('anything');
 
-        $this->assertCount(1, $this->guzzler->getHistory());
+        /**
+         * History array is shaped like
+         * [
+         *      [
+         *          'request'  => object,
+         *          'response' => object,
+         *          'errors'   => array,
+         *          'options'  => array
+         *      ],
+         *      // ...
+         * ]
+         */
+        $this->assertCount(3, $this->guzzler->getHistory());
+        $this->assertArrayHasKey('request', $this->guzzler->getHistory(2));
+        $this->assertEquals(
+            'POST',
+            $this->guzzler->getHistory(1, 'request')->getMethod()
+        );
     }
 
     public function testQueueResponseWithException()
