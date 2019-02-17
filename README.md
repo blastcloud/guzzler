@@ -260,7 +260,7 @@ $this->guzzler->expects($this->once())
 
 ### withOption(string $name, string $value)
 
-You can expect a certain Guzzle Client option by passing a name and value to this method.
+You can expect a certain Guzzle Client/Request option by passing a name and value to this method.
 
 ```php
 $this->guzzler->expects($this->once())
