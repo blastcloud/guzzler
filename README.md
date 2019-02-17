@@ -20,7 +20,8 @@ class SomeTest extends TestCase
     {
         parent::setUp();
     
-        $client = $this->guzzler->getClient(/** Any configs for a client */ [
+        $client = $this->guzzler->getClient([
+            /* Any configs for a client */
             "base_uri" => "https://example.com/api"
         ]);
         
@@ -76,9 +77,9 @@ class SomeTest extends TestCase
 
 This trait wires up a class variable named `guzzler`. Inside that object the necessary history and mock handlers for Guzzle are instantiated and saved. You can completely customize the `Client` object however you like in two different ways.
 
-### getClient(array $options)
+### getClient(array $options = [])
 
-The `getClient` method returns a new instance of the Guzzle `Client` class and adds any options you like to it’s constructor.
+The `getClient` method returns a new instance of the Guzzle `Client` class and adds any options you like to it’s constructor. Adding extra options is **not** required.
 
 ```php
 $client = $this->guzzler->getClient([
