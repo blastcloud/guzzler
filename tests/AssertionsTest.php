@@ -4,6 +4,7 @@ namespace tests;
 
 use GuzzleHttp\Client;
 use Guzzler\Expectation;
+use Guzzler\UndefinedIndexException;
 use Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -14,6 +15,10 @@ class AssertionsTest extends TestCase
 
     /** @var Client */
     public $client;
+
+    public $options = [
+        'headers' => ['Guzzler' => '**the-values**']
+    ];
 
     public function setUp(): void
     {
@@ -32,6 +37,22 @@ class AssertionsTest extends TestCase
         }
     }
 
+    public function setUpHistory()
+    {
+        $count = count(Expectation::VERBS);
+        $this->guzzler->queueMany(new Response(), $count + 4);
+
+        foreach (Expectation::VERBS as $verb) {
+            $this->client->$verb('/a-url', $this->options);
+        }
+
+        for ($i = 0; $i < 4; $i++) {
+            $this->client->get('/a-different-url', $this->options);
+        }
+
+        return $count + 4;
+    }
+
     public function testAssertNoHistoryPasses()
     {
         $this->guzzler->assertNoHistory();
@@ -39,15 +60,13 @@ class AssertionsTest extends TestCase
 
     public function testAssertNoHistoryFails()
     {
-        $this->guzzler->queueResponse(new Response(200));
-        $this->client->get('woeij');
+        $this->setUpHistory();
 
         $res = $this->catchAnything(function () {
             $this->guzzler->assertNoHistory();
         });
 
         $this->assertNotNull($res);
-        $this->assertNotNull($res->getMessage());
 
         // With message provided.
         $message = 'some special message';
@@ -60,12 +79,9 @@ class AssertionsTest extends TestCase
 
     public function testAssertHistoryCountPasses()
     {
-        $this->guzzler->queueResponse(new Response(), new Response());
+        $this->guzzler->assertHistoryCount(0);
 
-        $this->client->get('woiej');
-        $this->client->post('aowei');
-
-        $this->guzzler->assertHistoryCount(2);
+        $this->guzzler->assertHistoryCount($this->setUpHistory());
     }
 
     public function testAssertHistoryCountFails()
@@ -84,22 +100,9 @@ class AssertionsTest extends TestCase
         $this->assertEquals($message, $res->getMessage());
     }
 
-    public function testEachAssertRequiringHistoryFailsOnEmptyHistory()
-    {
-        foreach (['assertFirst', 'assertLast', 'assertAll'] as $method) {
-            $r = $this->catchAnything(function () use ($method) {
-                $this->guzzler->$method(function ($expectation) {});
-            });
-
-            $this->assertStringContainsString('empty', $r->getMessage());
-        }
-    }
-
     public function testAssertFirstPasses()
     {
-        $this->guzzler->queueResponse(new Response(), new Response());
-        $this->client->get('/a-url');
-        $this->client->post('/nowhere');
+        $this->setUpHistory();
 
         $this->guzzler->assertFirst(function (Expectation $e) {
             return $e->get('/a-url');
@@ -108,12 +111,10 @@ class AssertionsTest extends TestCase
 
     public function testAssertFirstFails()
     {
-        $this->guzzler->queueResponse(new Response(), new Response());
-        $this->client->get('/a-url');
-        $this->client->post('/nowhere');
+        $this->setUpHistory();
 
         $r = $this->catchAnything(function () {
-            $this->guzzler->assertLast(function ($e) {
+            $this->guzzler->assertFirst(function ($e) {
                 return $e->post('/a-url');
             });
         });
@@ -123,7 +124,7 @@ class AssertionsTest extends TestCase
         // Custom Message
         $m = 'the special message';
         $r = $this->catchAnything(function () use ($m) {
-            $this->guzzler->assertLast(function ($e) {
+            $this->guzzler->assertFirst(function ($e) {
                return $e->post('/a-url');
             }, $m);
         });
@@ -131,41 +132,28 @@ class AssertionsTest extends TestCase
         $this->assertEquals($m, $r->getMessage());
     }
 
-    public function setUpAssertAll()
-    {
-        $this->guzzler->queueResponse(
-            new Response(),
-            new Response(),
-            new Response()
-        );
-
-        $key = 'Authorization'; $value = 'abdecfg';
-        $options = ['headers' => [$key => $value]];
-
-        $this->client->get('woeij', $options);
-        $this->client->get('aeice', $options);
-
-        return $options;
-    }
-
     public function testAssertAllSuccess()
     {
-        $options = $this->setUpAssertAll();
-        $this->client->post('ceowu', $options);
+        $this->setUpHistory();
 
-        $this->guzzler->assertAll(function ($e) use ($options) {
-            return $e->withHeaders($options['headers']);
+        $this->guzzler->assertAll(function ($e) {
+            return $e->withHeaders($this->options['headers']);
         });
+    }
+
+    public function testAssertAllEmpty()
+    {
+        $this->expectException(UndefinedIndexException::class);
+        $this->guzzler->assertAll(function ($e) {});
     }
 
     public function testAssertAllFail()
     {
-        $options = $this->setUpAssertAll();
-        $this->client->get('aeice');
+        $this->setUpHistory();
 
-        $r = $this->catchAnything(function () use ($options) {
-            $this->guzzler->assertAll(function ($e) use ($options) {
-                return $e->withHeaders($options['headers']);
+        $r = $this->catchAnything(function () {
+            $this->guzzler->assertAll(function ($e) {
+                return $e->get('/a-url');
             });
         });
 
@@ -173,12 +161,27 @@ class AssertionsTest extends TestCase
 
         // With custom message
         $message = 'aoiucoewuewknoih';
-        $p = $this->catchAnything(function () use ($options, $message) {
-            $this->guzzler->assertAll(function ($e) use ($options, $message) {
-                return $e->withHeaders($options['headers']);
+        $p = $this->catchAnything(function () use ($message) {
+            $this->guzzler->assertAll(function ($e) {
+                return $e->get('/a-url');
             }, $message);
         });
 
         $this->assertEquals($message, $p->getMessage());
+    }
+
+    public function testAssertIndexUndefined()
+    {
+        $this->expectException(UndefinedIndexException::class);
+        $this->guzzler->assertIndexes([7], function ($e){});
+    }
+
+    public function testAssertLastPasses()
+    {
+        $this->setUpHistory();
+
+        $this->guzzler->assertLast(function ($e) {
+            return $e->get('/a-different-url');
+        });
     }
 }

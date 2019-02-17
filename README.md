@@ -49,8 +49,8 @@ class SomeTest extends TestCase
         $this->classToTest->someMethod();
         // ... Some other number of calls
     
-        $this->guzzler->assertAll(function (Expectation $ex) {
-            return $ex->withHeader("Authorization", "some-key");
+        $this->guzzler->assertAll(function ($expect) {
+            return $expect->withHeader("Authorization", "some-key");
         });
     }
 }
@@ -111,7 +111,7 @@ $client = new Client([
 
 ## Mocking Responses
 
-There are two main ways to provide responses to return from your client; `queueResponse()` directly on the `guzzler` instance, and `will()` or `willRespond()` on an expectation.
+There are three main ways to provide responses to return from your client; `queueResponse()` and `queueMany()` methods directly on the `guzzler` instance, and `will()` or `willRespond()` on an expectation.
 
 ### queueResponse(...$responses)
 
@@ -143,6 +143,15 @@ $this->guzzler->queueResponse(new \InvalidArgumentException(“message”));
 
 > Be aware that whatever order you queue your responses is the order they will be returned from your client, no matter the URI or method of the request. This is a constraint of Guzzle’s mock handler.
 
+### queueMany($response, int $times = 1)
+
+To quickly add multiple responses to the queue without making each one individually, the `queueMany` method can repeat a specific response any number of times you specify.
+
+```php
+// Add 5 responses with status code 201 to the queue.
+$this->guzzler->queueMany(new Response(201), 5);
+```
+
 ### will($response, int $times = 1), willRespond($response, int $times = 1)
 
 If you are using expectations in your test, you can add responses to the expectation chain with either `will()` or its alias, `willRespond()`. In both cases, you can provide a single response, promise, or otherwise and the number of times it should be added to the queue. This is so that you can make sure to add a response for each expected invocation.
@@ -152,9 +161,9 @@ $this->guzzler->expects($this->atLeast(9))
     ->get("/some-uri")
     ->willRespond(new Response(200), 12);
 
-$this->guzzler->expects($this->once())
+$this->guzzler->expects($this->twice())
     ->post("/another-uri")
-    ->will(new \Exception("some message"));
+    ->will(new \Exception("some message"), 2);
 ```
 
 If you’d like to return different responses from the same expectation, you can still chain your `will()` or `willRespond()` statements.

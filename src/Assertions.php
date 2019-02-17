@@ -38,11 +38,12 @@ trait Assertions
      */
     public function assertHistoryCount(int $count, $message = null)
     {
-        if (count($this->history) !== $count) {
-            Assert::fail($message ?? 'Failed asserting that Guzzle received '.$count.' '.($count > 1 ? 'requests.' : 'request.'));
-        }
+        $r = $count > 1 ? 'requests' : 'request';
 
-        $this->increment();
+        $this->assert(
+            count($this->history) == $count,
+            $message ?? "Failed asserting that Guzzle received {$count} {$r}."
+        );
     }
 
     /**
@@ -52,20 +53,13 @@ trait Assertions
      */
     protected function findOrFailIndexes(array $indexes)
     {
-        return array_filter($indexes, function ($index) {
-            die(var_dump($index));
-        });
-
-        $r = [];
-
-        foreach ($indexes as $i) {
+        return array_map(function ($i) {
             if (!isset($this->history[$i])) {
                 throw new UndefinedIndexException("Guzzle history does not have a {$i} index.");
             }
-            $r[$i] = $this->history[$i];
-        }
 
-        return $r;
+            return $this->history[$i];
+        }, $indexes);
     }
 
     /**
@@ -116,7 +110,7 @@ trait Assertions
         );
 
         $this->assert(
-            count($h) !== 1,
+            count($h) == 1,
             $message ?? 'Failed asserting that the first request met expectations.'
         );
     }
@@ -131,12 +125,14 @@ trait Assertions
     public function assertLast(\Closure $closure, $message = null)
     {
         $h = $this->runClosure(
-            $this->findOrFailIndexes([count($this->history) - 1]),
+            $this->findOrFailIndexes([
+                max(array_keys($this->history))
+            ]),
             $closure
         );
 
         $this->assert(
-            count($h) !== 1,
+            count($h) == 1,
             $message ?? 'Failed asserting that the last request met expectations.'
         );
     }
@@ -154,12 +150,7 @@ trait Assertions
             throw new UndefinedIndexException("Guzzle history is currently empty.");
         }
 
-        $h = $this->runClosure($this->history, $closure);
-
-        $this->assert(
-            count($h) !== count($this->history),
-            $message ?? 'Failed asserting that all requests met expectations.'
-        );
+        $this->assertIndexes(array_keys($this->history), $closure, $message);
     }
 
     public function assertIndexes(array $indexes, \Closure $closure, $message = null)
@@ -169,12 +160,11 @@ trait Assertions
             $closure
         );
 
-        $diff = array_diff_assoc($indexes, array_keys($h));
+        $diff = array_diff($indexes, array_keys($h));
 
-        if (count($diff)) {
-            Assert::fail($message ?? "Failed asserting that indexes ".implode(',', $diff)." met expectations");
-        }
-
-        $this->increment();
+        $this->assert(
+            empty($diff),
+            $message ?? "Failed asserting that indexes ".implode(',', $diff)." met expectations."
+        );
     }
 }
