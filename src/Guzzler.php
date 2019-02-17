@@ -18,9 +18,7 @@ class Guzzler
     /** @var MockHandler */
     protected $mockHandler;
 
-    /**
-     * @var array [Expectation]
-     */
+    /** @var array [Expectation] */
     protected $expectations = [];
 
     public function __construct(TestCase $testInstance)

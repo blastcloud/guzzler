@@ -52,9 +52,9 @@ trait Assertions
      */
     protected function findOrFailIndexes(array $indexes)
     {
-        if (empty($this->history)) {
-            throw new UndefinedIndexException("Guzzle history is currently empty.");
-        }
+        return array_filter($indexes, function ($index) {
+            die(var_dump($index));
+        });
 
         $r = [];
 
@@ -86,6 +86,22 @@ trait Assertions
     }
 
     /**
+     * This is really just a convenience method to save a few repeated lines
+     * for each assert method.
+     *
+     * @param bool $test
+     * @param $message
+     */
+    protected function assert(bool $test, $message)
+    {
+        if (!$test) {
+            Assert::fail($message);
+        }
+
+        $this->increment();
+    }
+
+    /**
      * Assert that the first request meets expectations.
      *
      * @param \Closure $closure
@@ -99,11 +115,10 @@ trait Assertions
             $closure
         );
 
-        if (count($h) !== 1) {
-            Assert::fail($message ?? 'Failed asserting that the first request met expectations.');
-        }
-
-        $this->increment();
+        $this->assert(
+            count($h) !== 1,
+            $message ?? 'Failed asserting that the first request met expectations.'
+        );
     }
 
     /**
@@ -120,11 +135,10 @@ trait Assertions
             $closure
         );
 
-        if (count($h) !== 1) {
-            Assert::fail($message ?? 'Failed asserting that the last request met expectations.');
-        }
-
-        $this->increment();
+        $this->assert(
+            count($h) !== 1,
+            $message ?? 'Failed asserting that the last request met expectations.'
+        );
     }
 
     /**
@@ -136,15 +150,16 @@ trait Assertions
      */
     public function assertAll(\Closure $closure, $message = null)
     {
-        $this->findOrFailIndexes([]);
+        if (empty($this->history)) {
+            throw new UndefinedIndexException("Guzzle history is currently empty.");
+        }
 
         $h = $this->runClosure($this->history, $closure);
 
-        if (count($h) !== count($this->history)) {
-            Assert::fail($message ?? 'Failed asserting that all requests met expectations.');
-        }
-
-        $this->increment();
+        $this->assert(
+            count($h) !== count($this->history),
+            $message ?? 'Failed asserting that all requests met expectations.'
+        );
     }
 
     public function assertIndexes(array $indexes, \Closure $closure, $message = null)
