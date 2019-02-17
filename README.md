@@ -395,3 +395,17 @@ $history = [
     // ...
 ];
 ```
+
+### queueCount()
+
+Retrieve the total number of response items in the mock handler's queue.
+
+````php
+echo $this->guzzler->queueCount();
+// 0
+
+$this->guzzler->queueMany(new Response(), 6);
+
+echo $this->guzzler->queueCount();
+// 6
+```
