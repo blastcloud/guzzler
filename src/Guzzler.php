@@ -85,6 +85,29 @@ class Guzzler
     }
 
     /**
+     * Add a response to the mock queue multiple times.
+     *
+     * @param mixed $argument
+     * @param int $times
+     */
+    public function queueMany($argument, int $times = 1)
+    {
+        for ($i = 0; $i < $times; $i++) {
+            $this->mockHandler->append($argument);
+        }
+    }
+
+    /**
+     * Get the current count of responses in the mock queue.
+     *
+     * @return int
+     */
+    public function queueCount()
+    {
+        return $this->mockHandler->count();
+    }
+
+    /**
      * Return the history stack Guzzle builds with each request/response.
      *
      * @return array

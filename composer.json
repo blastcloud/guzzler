@@ -1,8 +1,19 @@
 {
-    "require-dev": {
-        "php": "^7.0",
-        "phpunit/phpunit": "^8.0",
-        "guzzlehttp/guzzle": "^6.3",
+    "name": "blastcloud/guzzler",
+    "description": "Use mocking syntax with Guzzle without mocking Guzzle",
+    "keywords": ["guzzle", "phpunit", "testing"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Adam Kelso",
+            "email": "kelso.adam@gmail.com",
+            "role": "lead"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "phpunit/phpunit": ">=7.0",
+        "guzzlehttp/guzzle": ">=6.0",
         "ext-json": "*"
     },
     "autoload": {
@@ -10,5 +21,6 @@
             "Guzzler\\": "src/",
             "tests\\": "tests/"
         }
-    }
+    },
+    "prefer-stable": true
 }

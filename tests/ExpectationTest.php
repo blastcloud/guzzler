@@ -50,6 +50,14 @@ class ExpectationTest extends TestCase
         $this->client->post('/at-least');
     }
 
+    public function testWillAndWillRespond()
+    {
+        $this->guzzler->expects($this->once())
+            ->willRespond(new Response());
+
+        $this->client->get('woiej');
+    }
+
     //public function
 
     public function testWithHeaders()

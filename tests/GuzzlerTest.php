@@ -56,6 +56,37 @@ class GuzzlerTest extends TestCase
         $this->assertEquals($response, $result);
     }
 
+    public function testQueueManyWithResponse()
+    {
+        $response = new Response();
+        $this->guzzler->queueMany($response, 12);
+
+        $this->assertEquals(12, $this->guzzler->queueCount());
+    }
+
+    public function testQueueCount()
+    {
+        $this->assertEquals(0, $this->guzzler->queueCount());
+
+        $this->guzzler->queueResponse(
+            new Response(),
+            new Response(),
+            new Response()
+        );
+
+        $this->assertEquals(3, $this->guzzler->queueCount());
+    }
+
+    public function testGetHistory()
+    {
+        $this->assertEmpty($this->guzzler->getHistory());
+
+        $this->guzzler->queueResponse(new Response());
+        $this->guzzler->getClient()->get('anything');
+
+        $this->assertCount(1, $this->guzzler->getHistory());
+    }
+
     public function testQueueResponseWithException()
     {
         $exception = new BadResponseException('You suck!', new Request('',''));
