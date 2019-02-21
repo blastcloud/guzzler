@@ -62,7 +62,7 @@ class SomeTest extends TestCase
 Add the dependency to your *composer.json* file.
 
 ```bash
-composer require —dev blastcloud/guzzler
+composer require --dev --prefer-dist blastcloud/guzzler
 ```
 
 Add the `Guzzler\UsesGuzzler` trait to your test class.
