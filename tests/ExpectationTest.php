@@ -4,6 +4,7 @@ namespace tests;
 
 use GuzzleHttp\Psr7\Response;
 use Guzzler\Expectation;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 class ExpectationTest extends TestCase
@@ -44,6 +45,19 @@ class ExpectationTest extends TestCase
         $this->client->get('/once');
         $this->client->post('/at-least');
         $this->client->post('/at-least');
+    }
+
+    public function testInvocationsFails()
+    {
+        $expectation = (new Expectation($this->once()))
+            ->get('/anything');
+
+        try {
+            $expectation($this, []);
+            $this->fail('Did not throw an invocation fail.');
+        } catch (\Exception $e) {
+            $this->assertContains((string) $expectation, $e->getMessage());
+        }
     }
 
     public function testWillAndWillRespond()
