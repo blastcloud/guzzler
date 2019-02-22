@@ -67,11 +67,11 @@ trait Assertions
      *
      * @param array $history
      * @param \Closure $closure
+     * @param Expectation $e
      * @return mixed
      */
-    protected function runClosure(array $history, \Closure $closure)
+    protected function runClosure(array $history, \Closure $closure, Expectation $e)
     {
-        $e = new Expectation();
         $closure($e);
 
         return (function ($h) {
@@ -106,12 +106,13 @@ trait Assertions
     {
         $h = $this->runClosure(
             $this->findOrFailIndexes([0]),
-            $closure
+            $closure,
+            $e = new Expectation()
         );
 
         $this->assert(
             count($h) == 1,
-            $message ?? 'Failed asserting that the first request met expectations.'
+            $message ?? 'Failed asserting that the first request met expectations.'.$e
         );
     }
 
@@ -128,12 +129,13 @@ trait Assertions
             $this->findOrFailIndexes([
                 max(array_keys($this->history))
             ]),
-            $closure
+            $closure,
+            $e = new Expectation()
         );
 
         $this->assert(
             count($h) == 1,
-            $message ?? 'Failed asserting that the last request met expectations.'
+            $message ?? 'Failed asserting that the last request met expectations.'.$e
         );
     }
 
@@ -157,25 +159,26 @@ trait Assertions
     {
         $h = $this->runClosure(
             $this->findOrFailIndexes($indexes),
-            $closure
+            $closure,
+            $e = new Expectation()
         );
 
         $diff = array_diff($indexes, array_keys($h));
 
         $this->assert(
             empty($diff),
-            $message ?? "Failed asserting that indexes [".implode(',', $diff)."] met expectations."
+            $message ?? "Failed asserting that indexes [".implode(',', $diff)."] met expectations.".$e
         );
     }
 
     public function assertNone(\Closure $closure, $message = null)
     {
-        $h = $this->runClosure($this->history, $closure);
+        $h = $this->runClosure($this->history, $closure, $e = new Expectation());
 
         $this->assert(
             empty($h),
             $message ?? 'Failed asserting that no history items met expectations. '.
-                'Indexes ['.implode(',', array_keys($h)).'] met expectations.'
+                'Indexes ['.implode(',', array_keys($h)).'] met expectations.'.$e
         );
     }
 }

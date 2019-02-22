@@ -101,6 +101,9 @@ class GuzzlerTest extends TestCase
             'POST',
             $this->guzzler->getHistory(1, 'request')->getMethod()
         );
+
+        // Use this one to prove that 0 is not seen to equal null.
+        $this->assertIsNotArray($this->guzzler->getHistory(0, 'request'));
     }
 
     public function testQueueResponseWithException()

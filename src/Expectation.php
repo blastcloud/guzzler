@@ -2,6 +2,9 @@
 
 namespace Guzzler;
 
+use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
 use PHPUnit\Framework\TestCase;
@@ -44,6 +47,7 @@ class Expectation
     {
         $this->times = $times;
         $this->guzzler = $guzzler;
+        $this->endpoint = new Uri();
     }
 
     protected function addFilter($filter)
@@ -55,7 +59,7 @@ class Expectation
 
     public function endpoint(string $uri, string $method)
     {
-        $this->endpoint = $uri;
+        $this->endpoint = Uri::fromParts(parse_url($uri));
         $this->method = $method;
 
         $this->addFilter('endpoint');
@@ -184,7 +188,31 @@ class Expectation
             $this->times->invoked(new ObjectInvocation('', '', [], '', $i['request']));
         }
 
-        // Invocation Counts
-        $this->times->verify();
+        try {
+            // Invocation Counts
+            $this->times->verify();
+        } catch (ExpectationFailedException $e) {
+            Assert::fail($e->getMessage().' '.$this->__toString());
+        }
+    }
+
+    public function __toString()
+    {
+        $headers = json_encode($this->headers, JSON_PRETTY_PRINT);
+        $options = json_encode($this->options, JSON_PRETTY_PRINT);
+        $query = json_encode($this->query, JSON_PRETTY_PRINT);
+
+        return <<<MESSAGE
+
+
+Expectation: {$this->endpoint}
+-----------------------------
+  Method:   {$this->method}
+  Headers:  {$headers}
+  Options:  {$options}
+  Query:    {$query}
+  Protocol: {$this->protocol}
+  Body:     {$this->body}
+MESSAGE;
     }
 }

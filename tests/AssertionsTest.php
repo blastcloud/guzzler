@@ -3,6 +3,7 @@
 namespace tests;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Uri;
 use Guzzler\Expectation;
 use Guzzler\UndefinedIndexException;
 use Guzzler\UsesGuzzler;

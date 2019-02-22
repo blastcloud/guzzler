@@ -114,7 +114,7 @@ class Guzzler
      */
     public function getHistory(?int $index = null, $subIndex = null)
     {
-        if ($index == null) {
+        if ($index === null) {
             return $this->history;
         }
 

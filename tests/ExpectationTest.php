@@ -17,7 +17,7 @@ class ExpectationTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = $this->guzzler->getClient();
+        $this->client = $this->guzzler->getClient(['base_uri' => 'http://myspecialdomain.com']);
     }
 
     public function testExpectsReturnsExpectationInstanceAndIsChainable()
@@ -39,11 +39,7 @@ class ExpectationTest extends TestCase
         $this->guzzler->expects($this->atLeastOnce())
             ->endpoint('/at-least', 'POST');
 
-        $this->guzzler->queueResponse(
-            new Response(200),
-            new Response(200),
-            new Response(200)
-        );
+        $this->guzzler->queueMany(new Response(), 3);
 
         $this->client->get('/once');
         $this->client->post('/at-least');
@@ -138,5 +134,18 @@ class ExpectationTest extends TestCase
         foreach (Expectation::VERBS as $verb) {
             $expectation->$verb('/a-url');
         }
+    }
+
+    public function testUrlParam()
+    {
+        $this->guzzler->queueMany(new Response(), 3);
+
+        $this->client->get('/some-url', [
+            'query' => ['first' => 'a-value', 'second' => 'another-value']
+        ]);
+
+        $this->guzzler->assertFirst(function ($e) {
+            return $e->get('/some-url?first=a-value&second=another-value');
+        });
     }
 }

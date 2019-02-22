@@ -2,13 +2,17 @@
 
 namespace Guzzler;
 
+use GuzzleHttp\Psr7\Uri;
+
 trait Filters
 {
-    /** @var string */
+    /** @var Uri */
     protected $endpoint;
 
     /** @var string */
     protected $method;
+
+    protected $query = [];
 
     protected $headers = [];
 
@@ -30,7 +34,7 @@ trait Filters
     {
         return array_filter($history, function($call) {
             return $call['request']->getMethod() == $this->method
-                && $call['request']->getUri() == $this->endpoint;
+                && $call['request']->getUri()->getPath() == $this->endpoint->getPath();
         });
     }
 
