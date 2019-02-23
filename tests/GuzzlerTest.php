@@ -105,6 +105,17 @@ class GuzzlerTest extends TestCase
         // Use this one to prove that 0 is not seen to equal null.
         $this->assertIsNotArray($this->guzzler->getHistory(0, 'request'));
     }
+    
+    public function testHistoryCount()
+    {
+        $this->assertEquals(0, $this->guzzler->historyCount());
+        
+        $this->queueMany(new Response(), 2);
+        $this->guzzler->getClient()->get('/aowije');
+        $this->guzzler->getClient()->delete('/oicew');
+        
+        $this-assertEquals(2, $this->guzzler->historyCount());
+    }
 
     public function testQueueResponseWithException()
     {

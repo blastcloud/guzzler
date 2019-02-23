@@ -430,6 +430,18 @@ $options = $this->guzzler->getHistory(4, 'options');
 */
 ```
 
+### historyCount()
+
+Retrieve the total number of requests that were made on the client.
+
+```php
+$this->client->get('/first');
+$this->client->delete('/second');
+
+echo $this->guzzler->historyCount();
+// 2
+```
+
 ### queueCount()
 
 Retrieve the total number of response items in the mock handler's queue.

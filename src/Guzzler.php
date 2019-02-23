@@ -122,6 +122,16 @@ class Guzzler
             ? $this->history[$index]
             : $this->history[$index][$subIndex];
     }
+    
+    /**
+    * Return the count of history items.
+    *
+    * @return int
+    */
+    public function historyCount()
+    {
+        return count($this->history());
+    }
 
     /**
      * Create a new Expectation instance on which various pieces of the
