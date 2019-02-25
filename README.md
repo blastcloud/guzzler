@@ -333,6 +333,16 @@ $this->guzzler->assertFirst(function ($expectation) {
 });
 ```
 
+### assertNotFirst(Closure $expect, $message = null)
+
+Assert that the first request in history does not meet the expectation passed. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
+
+```php
+$this->guzzler->assertNotLast(function ($expect) {
+    return $expect->options('/some-url');
+});
+```
+
 ### assertLast(Closure $expect, $message = null)
 
 Assertions can be made specifically against the last item in the client history. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument.
@@ -343,13 +353,13 @@ $this->guzzler->assertLast(function ($expectation) {
 });
 ```
 
-### assertIndex(int $index, Closure $expect, $message = null)
+### assertNotLast(Closure $expect, $message = null)
 
-Assertions can be made against any specific index of the client history. The first argument should be an integer of the index to assert against. The second argument should be a closure that receives an `Expectation` and an optional error message can be passed as the third argument.
+Assert that the last request in history does not meet the expectation passed. The first argument should be a closure that receives an `Expectation` and an optional error message can be passed as the second argument. 
 
 ```php
-$this->guzzler->assertIndex(3, function ($expectation) {
-    return $expectation->post("/a-url");
+$this->guzzler->assertNotLast(function ($expect) {
+    return $expect->post('/some-url');
 });
 ```
 
@@ -360,6 +370,17 @@ Assertions can be made against any specific set of indexes in the client history
 ```php
 $this->guzzler->assertIndexes([2, 3, 6], function ($expectation) {
     return $expectation->withBody("some body string");
+});
+```
+
+### assertNotIndexes(array $indexes, Closure $expect, $message = null)
+
+Assertions can be made in the negative against any specific set of indexes in the client history. The first argument should be an array of integers that correspond to the indexes of history items. The second argument should be a closure that receives an `Expectation` and an optional error message can be passed as the third argument.
+
+```php
+$this->guzzler->assertNotIndexes([2, 3, 6], function ($expectation) {
+    return $expectation->delete('/some-url')
+        ->withBody(json_encode(['id-to-delete' => 42]));
 });
 ```
 

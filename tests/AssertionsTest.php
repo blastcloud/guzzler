@@ -60,7 +60,7 @@ class AssertionsTest extends TestCase
         $this->guzzler->assertNoHistory();
     }
 
-    public function testAssertNoHistoryFailsCustomMessage()
+    public function testAssertNoHistoryFailsWithCustomMessage()
     {
         $this->setUpHistory();
 
@@ -95,7 +95,7 @@ class AssertionsTest extends TestCase
         $this->guzzler->assertHistoryCount(0);
     }
 
-    public function testAssertHistoryCountFailsCustomMessage()
+    public function testAssertHistoryCountFailsWithCustomMessage()
     {
         $message = 'my message';
 
@@ -114,6 +114,15 @@ class AssertionsTest extends TestCase
         });
     }
 
+    public function testAssertNotFirstPasses()
+    {
+        $this->setUpHistory();
+
+        $this->guzzler->assertNotFirst(function (Expectation $e) {
+            return $e->post('/a-url');
+        });
+    }
+
     public function testAssertFirstFails()
     {
         $this->setUpHistory();
@@ -126,7 +135,20 @@ class AssertionsTest extends TestCase
         });
     }
 
-    public function testAssertFirstFailsCustomMessage()
+    public function testAssertNotFirstFails()
+    {
+        $this->setUpHistory();
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bfirst\b/");
+        $this->expectExceptionMessageRegExp("/\bnot meet\b/");
+
+        $this->guzzler->assertNotFirst(function ($e) {
+            return $e->get('/a-url');
+        });
+    }
+
+    public function testAssertFirstFailsWithCustomMessage()
     {
         $this->setUpHistory();
 
@@ -136,6 +158,19 @@ class AssertionsTest extends TestCase
 
         $this->guzzler->assertFirst(function ($e) {
            return $e->post('/a-url');
+        }, $m);
+    }
+
+    public function testAssertNotFirstFailsWithCustomMessage()
+    {
+        $this->setUpHistory();
+
+        $m = 'A custom message';
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($m);
+
+        $this->guzzler->assertNotFirst(function ($e) {
+            return $e->get('/a-url');
         }, $m);
     }
 
@@ -167,7 +202,7 @@ class AssertionsTest extends TestCase
         });
     }
 
-    public function testAssertAllFailCustomMessage()
+    public function testAssertAllFailWithCustomMessage()
     {
         $this->setUpHistory();
 
@@ -197,6 +232,15 @@ class AssertionsTest extends TestCase
         });
     }
 
+    public function testAssertNotLastPasses()
+    {
+        $this->setUpHistory();
+
+        $this->guzzler->assertNotLast(function ($e) {
+            return $e->post('/a-different-url');
+        });
+    }
+
     public function testAssertLastFailsDefaultMessage()
     {
         $this->setUpHistory();
@@ -209,7 +253,19 @@ class AssertionsTest extends TestCase
         });
     }
 
-    public function testAssertLastFailsCustomMessage()
+    public function testAssertNotLastFailsWithDefaultMessage()
+    {
+        $this->setUpHistory();
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bdid not\b/");
+
+        $this->guzzler->assertNotLast(function ($e) {
+            return $e->get('/a-different-url');
+        });
+    }
+
+    public function testAssertLastFailsWithCustomMessage()
     {
         $this->setUpHistory();
 
@@ -220,6 +276,19 @@ class AssertionsTest extends TestCase
         $this->guzzler->assertLast(function ($e) {
            return $e->options('/aoweij');
         }, $message);
+    }
+
+    public function testAssertNotLastFailsWithCustomMessage()
+    {
+        $this->setUpHistory();
+
+        $m = 'Lorem ipsum sal it amet.';
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($m);
+
+        $this->guzzler->assertNotLast(function ($e) {
+            return $e->get('/a-different-url');
+        }, $m);
     }
 
     public function testAssertNonePasses()
@@ -243,7 +312,7 @@ class AssertionsTest extends TestCase
         });
     }
 
-    public function testAssertNoneFailsCustomMessage()
+    public function testAssertNoneFailsWithCustomMessage()
     {
         $this->setUpHistory();
 

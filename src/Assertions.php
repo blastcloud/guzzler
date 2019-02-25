@@ -117,6 +117,27 @@ trait Assertions
     }
 
     /**
+     * Assert that the first request does not met expectations.
+     *
+     * @param \Closure $closure
+     * @param null $message
+     * @throws UndefinedIndexException
+     */
+    public function assertNotFirst(\Closure $closure, $message = null)
+    {
+        $h = $this->runClosure(
+            $this->findOrFailIndexes([0]),
+            $closure,
+            $e = new Expectation()
+        );
+
+        $this->assert(
+            count($h) < 1,
+            $message ?? 'Failed asserting that the first request did not meet expectations. '.$e
+        );
+    }
+
+    /**
      * Assert that the last request meets expectations.
      *
      * @param \Closure $closure
@@ -140,6 +161,29 @@ trait Assertions
     }
 
     /**
+     * Assert that the last request does not meet expectations.
+     *
+     * @param \Closure $closure
+     * @param null $message
+     * @throws UndefinedIndexException
+     */
+    public function assertNotLast(\Closure $closure, $message = null)
+    {
+        $h = $this->runClosure(
+            $this->findOrFailIndexes([
+                max(array_keys($this->history))
+            ]),
+            $closure,
+            $e = new Expectation()
+        );
+
+        $this->assert(
+            count($h) == 0,
+            $message ?? 'Failed asserting the the last request did not meet expectations. '.$e
+        );
+    }
+
+    /**
      * Assert that every request, regardless of count, meet expectations.
      *
      * @param \Closure $closure
@@ -155,6 +199,14 @@ trait Assertions
         $this->assertIndexes(array_keys($this->history), $closure, $message);
     }
 
+    /**
+     * Assert that a subset of history meets expectations.
+     *
+     * @param array $indexes
+     * @param \Closure $closure
+     * @param null $message
+     * @throws UndefinedIndexException
+     */
     public function assertIndexes(array $indexes, \Closure $closure, $message = null)
     {
         $h = $this->runClosure(
@@ -171,14 +223,39 @@ trait Assertions
         );
     }
 
-    public function assertNone(\Closure $closure, $message = null)
+    /**
+     * Assert that a subset of history does not meet expectations.
+     *
+     * @param array $indexes
+     * @param \Closure $closure
+     * @param null $message
+     * @throws UndefinedIndexException
+     */
+    public function assertNotIndexes(array $indexes, \Closure $closure, $message = null)
     {
-        $h = $this->runClosure($this->history, $closure, $e = new Expectation());
+        $h = $this->runClosure(
+            $this->findOrFailIndexes($indexes),
+            $closure,
+            $e = new Expectation()
+        );
+
+        $intersect = array_intersect_key(array_keys($h), $indexes);
 
         $this->assert(
-            empty($h),
-            $message ?? 'Failed asserting that no history items met expectations. '.
-                'Indexes ['.implode(',', array_keys($h)).'] met expectations.'.$e
+            empty($intersect),
+            $message ?? 'Failed asserting that indexes ['.implode(',', $intersect).'] did not meet expectations.'.$e
         );
+    }
+
+    /**
+     * Assert that no requests match the expectation.
+     *
+     * @param \Closure $closure
+     * @param null $message
+     * @throws UndefinedIndexException
+     */
+    public function assertNone(\Closure $closure, $message = null)
+    {
+        $this->assertNotIndexes(array_keys($this->history), $closure, $message);
     }
 }
