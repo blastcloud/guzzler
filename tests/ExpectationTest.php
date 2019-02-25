@@ -4,6 +4,7 @@ namespace tests;
 
 use GuzzleHttp\Psr7\Response;
 use Guzzler\Expectation;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -150,16 +151,24 @@ class ExpectationTest extends TestCase
         }
     }
 
-    public function testUrlParam()
+    public function testWithQuery()
     {
         $this->guzzler->queueMany(new Response(), 3);
+
+        $this->guzzler->expects($this->once())
+            ->withQuery([
+                'second' => 'another-value'
+            ]);
 
         $this->client->get('/some-url', [
             'query' => ['first' => 'a-value', 'second' => 'another-value']
         ]);
 
-        $this->guzzler->assertFirst(function ($e) {
-            return $e->get('/some-url?first=a-value&second=another-value');
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bExclusive: true\b/");
+
+        $this->guzzler->assertFirst(function (Expectation $e) {
+            return $e->withQuery(['second' => 'another-value'], true);
         });
     }
 }

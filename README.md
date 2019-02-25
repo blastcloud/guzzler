@@ -289,6 +289,34 @@ $this->guzzler->expects($this->once())
     ]);
 ```
 
+### withQuery(array $query, $exclusive = false)
+
+You can expect a set of query parameters to appear in the URL of the request by passing an array of key value pairs to match in the URL. The order of query parameters is not considered, and by default any additional parameters included in the URL are ignored.
+
+```php
+// Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
+
+// By default the 'format' parameter is ignored
+$this->guzzler->expects($this->once())
+    ->withQuery([
+        'to' => 25,
+        'from' => 15
+    ]);
+``` 
+
+To enforce only the URL parameters you specify, a boolean `true` can be passed as the second argument.
+
+```php
+// Example URL: http://example.com/api/v2/customers?from=15&to=25&format=xml
+
+// With the second argument, the 'format' parameter causes the expectation to fail.
+$this->guzzler->expects($this->once())
+    ->withQuery([
+        'to' => 25,
+        'from' => 15
+    ], true);
+```
+
 ## Assertions
 
 While `Expectation`s work great for cases where you don’t care about the order of requests to your client, you may find times where you want to verify either the order of requests in your client’s history, or you may want to make assertions about the entirety of its history. Guzzler provides a few convenience assertions for exactly this scenario.

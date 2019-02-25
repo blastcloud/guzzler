@@ -137,6 +137,16 @@ class Expectation
         return $this;
     }
 
+    public function withQuery(array $params, bool $exclusive = false)
+    {
+        $this->query = $params;
+        $this->queryExclusive = $exclusive;
+
+        $this->addFilter('query');
+
+        return $this;
+    }
+
     /**
      * Set a follow through; either response, callable, or Exception.
      *
@@ -201,18 +211,19 @@ class Expectation
         $headers = json_encode($this->headers, JSON_PRETTY_PRINT);
         $options = json_encode($this->options, JSON_PRETTY_PRINT);
         $query = json_encode($this->query, JSON_PRETTY_PRINT);
+        $exclusive = $this->queryExclusive ? 'true' : 'false';
 
         return <<<MESSAGE
 
 
 Expectation: {$this->endpoint}
 -----------------------------
-  Method:   {$this->method}
-  Headers:  {$headers}
-  Options:  {$options}
-  Query:    {$query}
-  Protocol: {$this->protocol}
-  Body:     {$this->body}
+Method:   {$this->method}
+Headers:  {$headers}
+Options:  {$options}
+Query: (Exclusive: {$exclusive})  {$query}
+Protocol: {$this->protocol}
+Body:     {$this->body}
 MESSAGE;
     }
 }
