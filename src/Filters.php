@@ -121,9 +121,10 @@ trait Filters
             foreach ($this->query as $key => $value) {
                 if (
                     !isset($query[$key])
-                    || $query[$key] != $value
                     || (is_array($query[$key])
-                            && !in_array($value, $query[$key]))
+                            && !in_array($value, $query[$key])
+                        )
+                    || $query[$key] != $value
                 ) {
                     return false;
                 }
