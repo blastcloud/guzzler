@@ -130,7 +130,7 @@ class Guzzler
     */
     public function historyCount()
     {
-        return count($this->history());
+        return count($this->history);
     }
 
     /**

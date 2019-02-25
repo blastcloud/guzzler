@@ -110,11 +110,11 @@ class GuzzlerTest extends TestCase
     {
         $this->assertEquals(0, $this->guzzler->historyCount());
         
-        $this->queueMany(new Response(), 2);
+        $this->guzzler->queueMany(new Response(), 2);
         $this->guzzler->getClient()->get('/aowije');
         $this->guzzler->getClient()->delete('/oicew');
         
-        $this-assertEquals(2, $this->guzzler->historyCount());
+        $this->assertEquals(2, $this->guzzler->historyCount());
     }
 
     public function testQueueResponseWithException()
