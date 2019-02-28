@@ -1,4 +1,4 @@
-<p align="center"><img src="Guzzler-logo.svg" style="max-width:350px;"></p>
+<p align="center"><img src="Guzzler-logo.svg" width="450"></p>
 
 ---
 
