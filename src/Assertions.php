@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzler;
+namespace BlastCloud\Guzzler;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Assert;

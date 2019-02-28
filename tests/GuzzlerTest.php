@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Promise\Promise;
 use GuzzleHttp\Psr7\{Request, Response};
 use PHPUnit\Framework\TestCase;
-use Guzzler\Guzzler;
+use BlastCloud\Guzzler\Guzzler;
 use GuzzleHttp\Client;
 
 class GuzzlerTest extends TestCase

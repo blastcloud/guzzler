@@ -3,10 +3,9 @@
 namespace tests;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Uri;
-use Guzzler\Expectation;
-use Guzzler\UndefinedIndexException;
-use Guzzler\UsesGuzzler;
+use BlastCloud\Guzzler\Expectation;
+use BlastCloud\Guzzler\UndefinedIndexException;
+use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;

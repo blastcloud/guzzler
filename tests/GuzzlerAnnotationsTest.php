@@ -2,16 +2,18 @@
 
 namespace tests;
 
+use BlastCloud\Guzzler\UsesGuzzler;
+
 class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
 {
-    use \Guzzler\UsesGuzzler;
+    use UsesGuzzler;
 
     public static $afterWasRun;
 
     public function testWrapperIsSetupBeforeTest(): void
     {
         $this->assertObjectHasAttribute('guzzler', $this);
-        $this->assertInstanceOf(\Guzzler\Guzzler::class, $this->guzzler);
+        $this->assertInstanceOf(\BlastCloud\Guzzler\Guzzler::class, $this->guzzler);
     }
 
     public function testExpectationsAreRunAfter()

@@ -3,14 +3,13 @@
 namespace tests;
 
 use GuzzleHttp\Psr7\Response;
-use Guzzler\Expectation;
+use BlastCloud\Guzzler\{Expectation, UsesGuzzler};
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 class ExpectationTest extends TestCase
 {
-    use \Guzzler\UsesGuzzler;
+    use UsesGuzzler;
 
     /** @var \GuzzleHttp\Client */
     public $client;
@@ -27,7 +26,7 @@ class ExpectationTest extends TestCase
         $result = $this->guzzler->expects($this->never())
             ->endpoint('/somewhere', 'GET');
 
-        $this->assertInstanceOf(\Guzzler\Expectation::class, $result);
+        $this->assertInstanceOf(\BlastCloud\Guzzler\Expectation::class, $result);
         $this->guzzler->queueResponse(new Response(200));
 
         $this->client->get('/somewhere-else');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzler;
+namespace BlastCloud\Guzzler;
 
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Assert;

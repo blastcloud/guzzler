@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzler;
+namespace BlastCloud\Guzzler;
 
 class UndefinedIndexException extends \Exception
 {
