@@ -66,7 +66,8 @@ trait Filters
      * @param array $history
      * @return array
      */
-    protected function filterByBody(array $history) {
+    protected function filterByBody(array $history)
+    {
         return array_filter($history, function ($call) {
             return $call['request']->getBody() == $this->body;
         });
@@ -78,7 +79,8 @@ trait Filters
      * @param array $history
      * @return array
      */
-    protected function filterByProtocol(array $history) {
+    protected function filterByProtocol(array $history)
+    {
         return array_filter($history, function ($call) {
             return $call['request']->getProtocolVersion() == $this->protocol;
         });
@@ -122,8 +124,8 @@ trait Filters
                 if (
                     !isset($query[$key])
                     || (is_array($query[$key])
-                            && !in_array($value, $query[$key])
-                        )
+                        && !in_array($value, $query[$key])
+                    )
                     || $query[$key] != $value
                 ) {
                     return false;

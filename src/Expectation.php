@@ -35,7 +35,12 @@ class Expectation
      * Each value in this array becomes a convenience method over endpoint().
      */
     public const VERBS = [
-        'get', 'post', 'put', 'delete', 'patch', 'options'
+        'get',
+        'post',
+        'put',
+        'delete',
+        'patch',
+        'options'
     ];
 
     /**
@@ -77,7 +82,7 @@ class Expectation
     public function __call($name, $arguments)
     {
         if (!in_array($name, self::VERBS)) {
-            throw new \Error(sprintf("Call to undefined method %s::%s()",__CLASS__, $name));
+            throw new \Error(sprintf("Call to undefined method %s::%s()", __CLASS__, $name));
         }
 
         return $this->endpoint($arguments[0], strtoupper($name));
@@ -202,7 +207,7 @@ class Expectation
             // Invocation Counts
             $this->times->verify();
         } catch (ExpectationFailedException $e) {
-            Assert::fail($e->getMessage().' '.$this->__toString());
+            Assert::fail($e->getMessage() . ' ' . $this->__toString());
         }
     }
 

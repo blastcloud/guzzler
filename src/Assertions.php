@@ -112,7 +112,7 @@ trait Assertions
 
         $this->assert(
             count($h) == 1,
-            $message ?? 'Failed asserting that the first request met expectations.'.$e
+            $message ?? 'Failed asserting that the first request met expectations.' . $e
         );
     }
 
@@ -133,7 +133,7 @@ trait Assertions
 
         $this->assert(
             count($h) < 1,
-            $message ?? 'Failed asserting that the first request did not meet expectations. '.$e
+            $message ?? 'Failed asserting that the first request did not meet expectations. ' . $e
         );
     }
 
@@ -156,7 +156,7 @@ trait Assertions
 
         $this->assert(
             count($h) == 1,
-            $message ?? 'Failed asserting that the last request met expectations.'.$e
+            $message ?? 'Failed asserting that the last request met expectations.' . $e
         );
     }
 
@@ -179,7 +179,7 @@ trait Assertions
 
         $this->assert(
             count($h) == 0,
-            $message ?? 'Failed asserting the the last request did not meet expectations. '.$e
+            $message ?? 'Failed asserting the the last request did not meet expectations. ' . $e
         );
     }
 
@@ -219,7 +219,7 @@ trait Assertions
 
         $this->assert(
             empty($diff),
-            $message ?? "Failed asserting that indexes [".implode(',', $diff)."] met expectations.".$e
+            $message ?? "Failed asserting that indexes [" . implode(',', $diff) . "] met expectations." . $e
         );
     }
 
@@ -243,7 +243,8 @@ trait Assertions
 
         $this->assert(
             empty($intersect),
-            $message ?? 'Failed asserting that indexes ['.implode(',', $intersect).'] did not meet expectations.'.$e
+            $message ?? 'Failed asserting that indexes [' . implode(',',
+                $intersect) . '] did not meet expectations.' . $e
         );
     }
 

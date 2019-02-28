@@ -18,7 +18,8 @@ class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
 
     public function testExpectationsAreRunAfter()
     {
-        $this->guzzler = new Class {
+        $this->guzzler = new Class
+        {
             public function runExpectations()
             {
                 GuzzlerAnnotationsTest::$afterWasRun = 'after has run';

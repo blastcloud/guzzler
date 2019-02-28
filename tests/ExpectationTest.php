@@ -56,7 +56,7 @@ class ExpectationTest extends TestCase
             $expectation($this, []);
             $this->fail('Did not throw an invocation fail.');
         } catch (\Exception $e) {
-            $this->assertContains((string) $expectation, $e->getMessage());
+            $this->assertContains((string)$expectation, $e->getMessage());
         }
     }
 

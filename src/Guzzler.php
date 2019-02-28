@@ -12,7 +12,7 @@ class Guzzler
 {
     use Assertions;
 
-    /** @var HandlerStack  */
+    /** @var HandlerStack */
     protected $handlerStack;
 
     /** @var MockHandler */
@@ -122,12 +122,12 @@ class Guzzler
             ? $this->history[$index]
             : $this->history[$index][$subIndex];
     }
-    
+
     /**
-    * Return the count of history items.
-    *
-    * @return int
-    */
+     * Return the count of history items.
+     *
+     * @return int
+     */
     public function historyCount()
     {
         return count($this->history);

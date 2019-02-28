@@ -156,7 +156,7 @@ class AssertionsTest extends TestCase
         $this->expectExceptionMessage($m);
 
         $this->guzzler->assertFirst(function ($e) {
-           return $e->post('/a-url');
+            return $e->post('/a-url');
         }, $m);
     }
 
@@ -186,7 +186,8 @@ class AssertionsTest extends TestCase
     {
         $this->expectException(UndefinedIndexException::class);
         $this->expectExceptionMessageRegExp("/\bempty\b/");
-        $this->guzzler->assertAll(function ($e) {});
+        $this->guzzler->assertAll(function ($e) {
+        });
     }
 
     public function testAssertAllFailDefaultMessage()
@@ -219,7 +220,8 @@ class AssertionsTest extends TestCase
         $this->expectException(UndefinedIndexException::class);
         // Should include the index number of failure
         $this->expectExceptionMessageRegExp("/\b[7]\b/");
-        $this->guzzler->assertIndexes([7], function ($e){});
+        $this->guzzler->assertIndexes([7], function ($e) {
+        });
     }
 
     public function testAssertLastPasses()
@@ -273,7 +275,7 @@ class AssertionsTest extends TestCase
         $this->expectExceptionMessage($message);
 
         $this->guzzler->assertLast(function ($e) {
-           return $e->options('/aoweij');
+            return $e->options('/aoweij');
         }, $message);
     }
 
@@ -295,7 +297,7 @@ class AssertionsTest extends TestCase
         $this->setUpHistory();
 
         $this->guzzler->assertNone(function ($e) {
-           return $e->withOption('verify', false);
+            return $e->withOption('verify', false);
         });
     }
 
