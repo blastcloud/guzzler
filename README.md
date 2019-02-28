@@ -15,8 +15,8 @@ Guzzle is a fantastic library for making HTTP requests, but it’s not necessari
 ## Example Usage
 
 ```php
-use Guzzler/UsesGuzzler;
-use GuzzleHttp/Client;
+use BlastCloud\Guzzler\UsesGuzzler;
+use GuzzleHttp\Client;
 
 class SomeTest extends TestCase
 {
