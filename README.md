@@ -1,4 +1,5 @@
 <p align="center"><img src="Guzzler-logo.svg" width="450"></p>
+<p align="center"><img src="https://travis-ci.org/blastcloud/guzzler.svg?branch=master"></p>
 
 ---
 
