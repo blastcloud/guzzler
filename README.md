@@ -1,4 +1,4 @@
-# Guzzler
+<p align="center"><img src="Guzzler-logo.svg"></p>
 
 > Use PHPUnit Mock Syntax without Mocking Guzzle
 
