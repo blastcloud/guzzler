@@ -22,5 +22,8 @@
             "tests\\": "tests/"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "codeclimate/php-test-reporter": "^0.4.4"
+    }
 }

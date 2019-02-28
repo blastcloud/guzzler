@@ -2,3 +2,4 @@
 vendor
 .phpunit.result.cache
 tests/coverage
+build
