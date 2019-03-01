@@ -10,7 +10,7 @@
 
 ---
 
-Guzzle is a fantastic library for making HTTP requests, but it’s not necessarily the easiest package to use in tests. You can mock the entire thing, but then you might also have to mock dozens of methods and several return types. It’s much easier to just use Guzzle. That’s where Guzzler comes in. This package covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
+Simplify your unit tests that use Guzzle with a mock-like syntax. Guzzler covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
 
 ## Example Usage
 
