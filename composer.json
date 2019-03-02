@@ -2,6 +2,7 @@
     "name": "blastcloud/guzzler",
     "description": "Use mocking syntax with Guzzle without mocking Guzzle",
     "keywords": ["guzzle", "phpunit", "testing"],
+    "license": "MIT",
     "type": "library",
     "authors": [
         {
