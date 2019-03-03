@@ -1,7 +1,7 @@
 {
     "name": "blastcloud/guzzler",
-    "description": "Use mocking syntax with Guzzle without mocking Guzzle",
-    "keywords": ["guzzle", "phpunit", "testing"],
+    "description": "Supercharge your unit tests that use Guzzle with a mock-like syntax.",
+    "keywords": ["guzzle", "phpunit", "testing", "php", "mock"],
     "license": "MIT",
     "type": "library",
     "authors": [

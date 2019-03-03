@@ -124,6 +124,18 @@ class Expectation
         return $this;
     }
 
+    public function synchronous()
+    {
+        return $this->withOption('synchronous', true);
+    }
+
+    public function asynchronous()
+    {
+        // Set to null, because if the request was asynchronous, the
+        // "synchronous" key is not set in the options array.
+        return $this->withOption('synchronous', null);
+    }
+
     public function withBody(string $body)
     {
         $this->body = $body;
