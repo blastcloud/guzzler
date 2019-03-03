@@ -12,9 +12,17 @@
 
 Simplify your unit tests that use Guzzle with a mock-like syntax. Guzzler covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
 
+## Installation
+
+```bash
+composer require --dev --prefer-dist blastcloud/guzzler
+```
+
 ## Example Usage
 
 ```php
+<?php
+
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 
@@ -65,4 +73,10 @@ class SomeTest extends TestCase
 }
 ```
 
-[Full Documentation](https://github.com/blastcloud/guzzler/wiki)
+## Documentation
+
+[Full Documentation](https://guzler.dev)
+
+## License
+
+Guzzler is open-source software licensed under the [MIT License](https://opensource.org/licenses/MIT).
