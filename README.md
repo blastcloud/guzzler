@@ -75,7 +75,7 @@ class SomeTest extends TestCase
 
 ## Documentation
 
-[Full Documentation](https://guzler.dev)
+[Full Documentation](https://guzzler.dev)
 
 ## License
 
