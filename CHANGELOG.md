@@ -12,3 +12,7 @@ All notable changes to this project will be documented in this file.
 ## [1.1.0] - 2019-03-03
 - Added the new `synchronous` and `asynchronous` methods to the `Expectations` class.
 - Updated brand slogan to "Supercharge your unit tests that use Guzzle with a mock-like syntax."
+
+## [1.2.0] - 2019-03-16
+- Added the new `withFormField` and `withForm` methods to the `Expectations` class.
+- Added the new `withJson` method to the `Expectations` class.
