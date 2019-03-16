@@ -137,6 +137,11 @@ trait Assertions
         );
     }
 
+    protected function getLast()
+    {
+        return $this->history[max(array_keys($this->history))];
+    }
+
     /**
      * Assert that the last request meets expectations.
      *
@@ -147,9 +152,7 @@ trait Assertions
     public function assertLast(\Closure $closure, $message = null)
     {
         $h = $this->runClosure(
-            $this->findOrFailIndexes([
-                max(array_keys($this->history))
-            ]),
+            [$this->getLast()],
             $closure,
             $e = new Expectation()
         );
@@ -170,9 +173,7 @@ trait Assertions
     public function assertNotLast(\Closure $closure, $message = null)
     {
         $h = $this->runClosure(
-            $this->findOrFailIndexes([
-                max(array_keys($this->history))
-            ]),
+            [$this->getLast()],
             $closure,
             $e = new Expectation()
         );

@@ -234,10 +234,50 @@ class ExpectationTest extends TestCase
         });
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bFormFields\b/");
+        $this->expectExceptionMessageRegExp("/\bForm\b/");
 
         $this->guzzler->assertLast(function ($expect) {
             return $expect->withFormField('doesntexist', 'Some value');
+        });
+    }
+
+    public function testJson()
+    {
+        $this->guzzler->queueMany(new Response(), 3);
+
+        $form = [
+            'first' => 'a value',
+            'second' => 'another value'
+        ];
+
+        $this->guzzler->expects($this->atLeastOnce())
+            ->withJson($form);
+
+        $this->client->post('/woeij', [
+            'json' => $form
+        ]);
+
+        $nestedJson = [
+            'first' => [
+                'nested' => 'nested value'
+            ]
+        ];
+        $this->guzzler->expects($this->once())
+            ->withJson($nestedJson);
+
+        $this->client->post('/coewiu', [
+            'json' => $nestedJson
+        ]);
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bJSON\b/");
+
+        $this->client->post('/awoei', [
+            'json' => $form + ['woeij' => 'aoiejw']
+        ]);
+
+        $this->guzzler->assertLast(function ($expect) use ($form) {
+            return $expect->withJson($form, true);
         });
     }
 }

@@ -6,27 +6,32 @@ use GuzzleHttp\Psr7\Uri;
 
 trait Filters
 {
+    /** @var string */
+    protected $body;
+
     /** @var Uri */
     protected $endpoint;
-
-    /** @var string */
-    protected $method;
-
-    protected $query = [];
-    protected $queryExclusive = false;
-
-    protected $headers = [];
-
-    protected $options = [];
 
     protected $form = [];
     protected $formExclusive = false;
 
+    protected $headers = [];
+
+    protected $json = [];
+    protected $jsonExclusion = false;
+
     /** @var string */
-    protected $body;
+    protected $method;
+
+    protected $messages = [];
+
+    protected $options = [];
 
     /** @var string */
     protected $protocol;
+
+    protected $query = [];
+    protected $queryExclusive = false;
 
     /**
      * Narrow to only those history items with the matching endpoint.
@@ -36,6 +41,8 @@ trait Filters
      */
     protected function filterByEndpoint(array $history)
     {
+        $this->messages[] = str_pad('Method:', self::STR_PAD).$this->method;
+
         return array_filter($history, function ($call) {
             return $call['request']->getMethod() == $this->method
                 && $call['request']->getUri()->getPath() == $this->endpoint->getPath();
@@ -50,6 +57,9 @@ trait Filters
      */
     protected function filterByHeaders(array $history)
     {
+        $this->messages[] = str_pad('Headers:', self::STR_PAD)
+            .json_encode($this->headers, JSON_PRETTY_PRINT);
+
         return array_filter($history, function ($call) {
             foreach ($this->headers as $key => $value) {
                 $header = $call['request']->getHeader($key);
@@ -71,6 +81,8 @@ trait Filters
      */
     protected function filterByBody(array $history)
     {
+        $this->messages[] = str_pad('Body:', self::STR_PAD).$this->body;
+
         return array_filter($history, function ($call) {
             return $call['request']->getBody() == $this->body;
         });
@@ -84,6 +96,8 @@ trait Filters
      */
     protected function filterByProtocol(array $history)
     {
+        $this->messages[] = str_pad('Protocol:', self::STR_PAD).$this->protocol;
+
         return array_filter($history, function ($call) {
             return $call['request']->getProtocolVersion() == $this->protocol;
         });
@@ -97,6 +111,9 @@ trait Filters
      */
     protected function filterByOptions(array $history)
     {
+        $this->messages[] = str_pad('Options:', self::STR_PAD)
+            .json_encode($this->options, JSON_PRETTY_PRINT);
+
         return array_filter($history, function ($call) {
             foreach ($this->options as $key => $value) {
                 $option = $call['options'][$key] ?? null;
@@ -120,6 +137,8 @@ trait Filters
      */
     protected function filterByQuery(array $history)
     {
+        $e = $this->queryExclusive ? 'true' : 'false';
+        $this->messages[] = "Query: (Exclusive: {$e})".json_encode($this->query);
 
         return array_filter($history, function ($call) {
             parse_str($call['request']->getUri()->getQuery(), $parsed);
@@ -132,9 +151,7 @@ trait Filters
         foreach ($fields as $key => $value) {
             if (
                 !isset($parsed[$key])
-                || (is_array($parsed[$key])
-                    && !in_array($value, $parsed[$key])
-                )
+                || (is_array($parsed[$key]) && !in_array($value, $parsed[$key]))
                 || $parsed[$key] != $value
             ) {
                 return false;
@@ -159,9 +176,31 @@ trait Filters
      */
     protected function filterByForm(array $history)
     {
+        $e = $this->formExclusive ? 'true' : 'false';
+        $this->messages[] = "Form: (Exclusive: {$e}) "
+            .json_encode($this->form, JSON_PRETTY_PRINT);
+
         return array_filter($history, function ($call) {
             parse_str($call['request']->getBody(), $parsed);
             return $this->testFields($this->form, $parsed, $this->formExclusive);
+        });
+    }
+
+    /**
+     * Narrow to only those history requests with the specified JSON body.
+     *
+     * @param array $history
+     * @return array
+     */
+    protected function filterByJson(array $history)
+    {
+        $e = $this->jsonExclusion ? 'true' : 'false';
+        $this->messages[] = "JSON: (Exclusive: {$e}) "
+            .json_encode($this->json, JSON_PRETTY_PRINT);
+
+        return array_filter($history, function ($call) {
+            $body = json_decode($call['request']->getBody(), true);
+            return $body == $this->json;
         });
     }
 }

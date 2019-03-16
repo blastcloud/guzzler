@@ -28,6 +28,8 @@ class Expectation
 
     protected $filters = [];
 
+    protected CONST STR_PAD = 10;
+
     /** @var InvokedRecorder */
     protected $times;
 
@@ -182,7 +184,15 @@ class Expectation
         return $this;
     }
 
+    public function withJson(array $json, bool $exclusive = false)
+    {
+        $this->json = $json;
+        $this->jsonExclusion = $exclusive;
 
+        $this->addFilter('json');
+
+        return $this->withHeader('Content-Type', 'application/json');
+    }
 
     /**
      * Set a follow through; either response, callable, or Exception.
@@ -245,25 +255,14 @@ class Expectation
 
     public function __toString()
     {
-        $headers = json_encode($this->headers, JSON_PRETTY_PRINT);
-        $options = json_encode($this->options, JSON_PRETTY_PRINT);
-        $query = json_encode($this->query, JSON_PRETTY_PRINT);
-        $form = json_encode($this->form, JSON_PRETTY_PRINT);
-        $queryExclusive = $this->queryExclusive ? 'true' : 'false';
-        $formExclusive = $this->formExclusive ? 'true' : 'false';
+        $messages = implode("\n", $this->messages);
 
         return <<<MESSAGE
 
 
 Expectation: {$this->endpoint}
 -----------------------------
-Method:   {$this->method}
-Headers:  {$headers}
-Options:  {$options}
-Query: (Exclusive: {$queryExclusive})  {$query}
-Protocol: {$this->protocol}
-Body:     {$this->body},
-FormFields: (Exclusive: {$formExclusive}) {$form}
+{$messages}
 MESSAGE;
     }
 }
