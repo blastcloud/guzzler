@@ -6,9 +6,14 @@
     <a href="https://codeclimate.com/github/blastcloud/guzzler/test_coverage">
         <img src="https://api.codeclimate.com/v1/badges/01c6f66eaa5db02e5411/test_coverage" />
     </a>
+    <a href="https://codeclimate.com/github/blastcloud/guzzler/maintainability">
+        <img src="https://api.codeclimate.com/v1/badges/01c6f66eaa5db02e5411/maintainability" />
+    </a>
 </p>
 
 ---
+
+> Full Documentation at [guzzler.dev](https://guzzler.dev)
 
 Supercharge your unit tests that use Guzzle with a mock-like syntax. Guzzler covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
 
