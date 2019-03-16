@@ -164,6 +164,26 @@ class Expectation
         return $this;
     }
 
+    public function withFormField($field, $value)
+    {
+        $this->form[$field] = $value;
+
+        $this->addFilter('form');
+
+        return $this;
+    }
+
+    public function withForm(array $form)
+    {
+        foreach ($form as $key => $value) {
+            $this->withFormField($key, $value);
+        }
+
+        return $this;
+    }
+
+
+
     /**
      * Set a follow through; either response, callable, or Exception.
      *
@@ -228,7 +248,9 @@ class Expectation
         $headers = json_encode($this->headers, JSON_PRETTY_PRINT);
         $options = json_encode($this->options, JSON_PRETTY_PRINT);
         $query = json_encode($this->query, JSON_PRETTY_PRINT);
-        $exclusive = $this->queryExclusive ? 'true' : 'false';
+        $form = json_encode($this->form, JSON_PRETTY_PRINT);
+        $queryExclusive = $this->queryExclusive ? 'true' : 'false';
+        $formExclusive = $this->formExclusive ? 'true' : 'false';
 
         return <<<MESSAGE
 
@@ -238,9 +260,10 @@ Expectation: {$this->endpoint}
 Method:   {$this->method}
 Headers:  {$headers}
 Options:  {$options}
-Query: (Exclusive: {$exclusive})  {$query}
+Query: (Exclusive: {$queryExclusive})  {$query}
 Protocol: {$this->protocol}
-Body:     {$this->body}
+Body:     {$this->body},
+FormFields: (Exclusive: {$formExclusive}) {$form}
 MESSAGE;
     }
 }

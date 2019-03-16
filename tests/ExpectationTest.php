@@ -212,4 +212,32 @@ class ExpectationTest extends TestCase
             return $e->asynchronous();
         });
     }
+
+    public function testForm()
+    {
+        $this->guzzler->queueResponse(new Response());
+
+        $form = [
+            'first' => 'a value',
+            'second' => 'another value'
+        ];
+
+        $this->guzzler->expects($this->once())
+            ->withFormField('first', 'a value');
+
+        $this->client->post('/the-form', [
+            'form_params' => $form
+        ]);
+
+        $this->guzzler->assertFirst(function ($expect) use ($form) {
+            return $expect->withForm($form);
+        });
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bFormFields\b/");
+
+        $this->guzzler->assertLast(function ($expect) {
+            return $expect->withFormField('doesntexist', 'Some value');
+        });
+    }
 }

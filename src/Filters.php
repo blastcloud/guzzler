@@ -19,6 +19,9 @@ trait Filters
 
     protected $options = [];
 
+    protected $form = [];
+    protected $formExclusive = false;
+
     /** @var string */
     protected $body;
 
@@ -117,27 +120,48 @@ trait Filters
      */
     protected function filterByQuery(array $history)
     {
+
         return array_filter($history, function ($call) {
-            parse_str($call['request']->getUri()->getQuery(), $query);
+            parse_str($call['request']->getUri()->getQuery(), $parsed);
+            return $this->testFields($this->query, $parsed, $this->queryExclusive);
+        });
+    }
 
-            foreach ($this->query as $key => $value) {
-                if (
-                    !isset($query[$key])
-                    || (is_array($query[$key])
-                        && !in_array($value, $query[$key])
-                    )
-                    || $query[$key] != $value
-                ) {
-                    return false;
-                }
-            }
-
-            // Only if "exclusive" flag is set to true.
-            if ($this->queryExclusive && count($query) > count($this->query)) {
+    protected function testFields(array $fields, array $parsed, $exclusive = false)
+    {
+        foreach ($fields as $key => $value) {
+            if (
+                !isset($parsed[$key])
+                || (is_array($parsed[$key])
+                    && !in_array($value, $parsed[$key])
+                )
+                || $parsed[$key] != $value
+            ) {
                 return false;
             }
+        }
 
-            return true;
+        // Only if "exclusive" flag is set to true.
+        if ($exclusive && count($parsed) > count($fields)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Narrow to only those history requests with the specified form params. By default
+     * more can exist, but if the "exclusive" flag was true, we eliminate if more
+     * form params exist. Also, order of form params is not considered.
+     *
+     * @param array $history
+     * @return array
+     */
+    protected function filterByForm(array $history)
+    {
+        return array_filter($history, function ($call) {
+            parse_str($call['request']->getBody(), $parsed);
+            return $this->testFields($this->form, $parsed, $this->formExclusive);
         });
     }
 }
