@@ -63,7 +63,7 @@ trait Assertions
     }
 
     /**
-     * Run filters from the closure Expectation with a specific subset of history.
+     * Run Filters from the closure Expectation with a specific subset of history.
      *
      * @param array $history
      * @param \Closure $closure

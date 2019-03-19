@@ -2,7 +2,7 @@
 
 namespace BlastCloud\Guzzler;
 
-use GuzzleHttp\Psr7\Uri;
+use BlastCloud\Guzzler\Interfaces\With;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
@@ -18,17 +18,17 @@ use PHPUnit\Framework\TestCase;
  * @method $this delete(string $uri)
  * @method $this patch(string $uri)
  * @method $this options(string $uri)
+ * @method $this withHeader(string $key, $value)
+ * @method $this withHeaders(array $values)
+ * @method $this withOption(string $key, $value)
+ * @method $this withOptions(array $values)
  */
 class Expectation
 {
-    use Filters;
-
     /** @var Guzzler */
     protected $guzzler;
 
     protected $filters = [];
-
-    protected CONST STR_PAD = 10;
 
     /** @var InvokedRecorder */
     protected $times;
@@ -54,22 +54,42 @@ class Expectation
     {
         $this->times = $times;
         $this->guzzler = $guzzler;
-        $this->endpoint = new Uri();
     }
 
-    protected function addFilter($filter)
+    /**
+     * @param $name
+     * @return bool|With
+     */
+    protected function isFilter($name)
     {
-        if (!in_array($filter, $this->filters)) {
-            $this->filters[] = $filter;
+        $parts = preg_split('/(?=[A-Z])/',$name);
+        if ($parts[0] == 'with') {
+            return $this->findFilter([$parts[1], rtrim($parts[1], 's')]);
         }
+
+        return false;
+    }
+
+    protected function findFilter(array $names) {
+        foreach ($names as $name) {
+            if (isset($this->filters[$name])) {
+                return $this->filters[$name];
+            }
+
+            $class = __NAMESPACE__."\\Filters\\With".$name;
+
+            if (class_exists($class)) {
+                $this->filters[$name] = $filter = new $class;
+                return $filter;
+            }
+        }
+
+        return false;
     }
 
     public function endpoint(string $uri, string $method)
     {
-        $this->endpoint = Uri::fromParts(parse_url($uri));
-        $this->method = $method;
-
-        $this->addFilter('endpoint');
+        $this->isFilter('withEndpoint')->add('endpoint', [$uri, $method]);
 
         return $this;
     }
@@ -83,47 +103,18 @@ class Expectation
      */
     public function __call($name, $arguments)
     {
-        if (!in_array($name, self::VERBS)) {
-            throw new \Error(sprintf("Call to undefined method %s::%s()", __CLASS__, $name));
+        // HTTP Verb convenience methods
+        if (in_array($name, self::VERBS)) {
+            return $this->endpoint($arguments[0], strtoupper($name));
         }
 
-        return $this->endpoint($arguments[0], strtoupper($name));
-    }
-
-    public function withHeader(string $key, $value)
-    {
-        $this->headers[$key] = $value;
-
-        $this->addFilter('headers');
-
-        return $this;
-    }
-
-    public function withHeaders(array $headers)
-    {
-        foreach ($headers as $key => $value) {
-            $this->withHeader($key, $value);
+        // Next try to see if it's a with* method we can use.
+        if ($filter = $this->isFilter($name)) {
+            $filter->add($name, $arguments);
+            return $this;
         }
 
-        return $this;
-    }
-
-    public function withOption(string $key, $value)
-    {
-        $this->options[$key] = $value;
-
-        $this->addFilter('options');
-
-        return $this;
-    }
-
-    public function withOptions(array $options)
-    {
-        foreach ($options as $key => $value) {
-            $this->withOption($key, $value);
-        }
-
-        return $this;
+        throw new \Error(sprintf("Call to undefined method %s::%s()", __CLASS__, $name));
     }
 
     public function synchronous()
@@ -136,62 +127,6 @@ class Expectation
         // Set to null, because if the request was asynchronous, the
         // "synchronous" key is not set in the options array.
         return $this->withOption('synchronous', null);
-    }
-
-    public function withBody(string $body)
-    {
-        $this->body = $body;
-
-        $this->addFilter('body');
-
-        return $this;
-    }
-
-    public function withVersion($protocol)
-    {
-        $this->protocol = $protocol;
-
-        $this->addFilter('protocol');
-
-        return $this;
-    }
-
-    public function withQuery(array $params, bool $exclusive = false)
-    {
-        $this->query = $params;
-        $this->queryExclusive = $exclusive;
-
-        $this->addFilter('query');
-
-        return $this;
-    }
-
-    public function withFormField($field, $value)
-    {
-        $this->form[$field] = $value;
-
-        $this->addFilter('form');
-
-        return $this;
-    }
-
-    public function withForm(array $form)
-    {
-        foreach ($form as $key => $value) {
-            $this->withFormField($key, $value);
-        }
-
-        return $this;
-    }
-
-    public function withJson(array $json, bool $exclusive = false)
-    {
-        $this->json = $json;
-        $this->jsonExclusion = $exclusive;
-
-        $this->addFilter('json');
-
-        return $this->withHeader('Content-Type', 'application/json');
     }
 
     /**
@@ -227,7 +162,7 @@ class Expectation
     protected function runFilters(array $history)
     {
         foreach ($this->filters as $filter) {
-            $history = $this->{'filterBy' . ucfirst($filter)}($history);
+            $history = $filter($history);
         }
 
         return $history;
@@ -255,12 +190,19 @@ class Expectation
 
     public function __toString()
     {
-        $messages = implode("\n", $this->messages);
+        $endpoint = $messages = '';
+
+        foreach ($this->filters as $filter) {
+            $messages .= $filter->__toString() . "\n";
+            if (property_exists($filter, 'endpoint')) {
+                $endpoint = $filter->endpoint;
+            }
+        }
 
         return <<<MESSAGE
 
 
-Expectation: {$this->endpoint}
+Expectation: {$endpoint}
 -----------------------------
 {$messages}
 MESSAGE;
