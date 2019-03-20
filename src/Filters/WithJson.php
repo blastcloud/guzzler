@@ -7,20 +7,47 @@ use BlastCloud\Guzzler\Interfaces\With;
 
 class WithJson extends Base implements With
 {
-    protected $json = [];
+    /** @var string */
+    protected $json = '';
     protected $exclusive = false;
 
     public function withJson(array $json, bool $exclusive = false)
     {
-        $this->json = $json;
         $this->exclusive = $exclusive;
+        // Pre-sort so it only needs to be done once.
+        $this->json = $json;
+        $this->sort($json);
+    }
+
+    protected function isAssoc(array $arr)
+    {
+        if ([] === $arr) return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    protected function sort(&$array) {
+        foreach ($array as &$value) {
+            if (is_array($value)) $this->sort($value);
+        }
+        return $this->isAssoc($array)
+            ? ksort($array)
+            : sort($array);
     }
 
     public function __invoke(array $history): array
     {
         return array_filter($history, function ($call) {
             $body = json_decode($call['request']->getBody(), true);
-            return $body == $this->json;
+
+            $this->sort($body);
+
+            $j1 = json_encode($body);
+            $j2 = json_encode($this->json);
+
+           // die(var_dump(strpos($j1, trim($j2, '{}'))));
+            return $this->exclusive
+                ? $j1 == $j2
+                : strpos($j1, trim($j2, '{}')) !== false;
         });
     }
 
