@@ -2,7 +2,7 @@
 
 namespace BlastCloud\Guzzler;
 
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Guzzler\Filters\Filters;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
@@ -22,13 +22,17 @@ use PHPUnit\Framework\TestCase;
  * @method $this withHeaders(array $values)
  * @method $this withOption(string $key, $value)
  * @method $this withOptions(array $values)
+ * @method $this withQuery(array $values, bool $exclusive = false)
+ * @method $this withJson(array $values, bool $exclusive = false)
+ * @method $this withForm(array $form, bool $exclusive = false)
+ * @method $this withFormField(string $key, $value)
  */
 class Expectation
 {
+    use Filters;
+
     /** @var Guzzler */
     protected $guzzler;
-
-    protected $filters = [];
 
     /** @var InvokedRecorder */
     protected $times;
@@ -54,37 +58,6 @@ class Expectation
     {
         $this->times = $times;
         $this->guzzler = $guzzler;
-    }
-
-    /**
-     * @param $name
-     * @return bool|With
-     */
-    protected function isFilter($name)
-    {
-        $parts = preg_split('/(?=[A-Z])/',$name);
-        if ($parts[0] == 'with') {
-            return $this->findFilter([$parts[1], rtrim($parts[1], 's')]);
-        }
-
-        return false;
-    }
-
-    protected function findFilter(array $names) {
-        foreach ($names as $name) {
-            if (isset($this->filters[$name])) {
-                return $this->filters[$name];
-            }
-
-            $class = __NAMESPACE__."\\Filters\\With".$name;
-
-            if (class_exists($class)) {
-                $this->filters[$name] = $filter = new $class;
-                return $filter;
-            }
-        }
-
-        return false;
     }
 
     public function endpoint(string $uri, string $method)
