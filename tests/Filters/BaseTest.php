@@ -12,7 +12,7 @@ class BaseTest extends TestCase
 
     public $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
