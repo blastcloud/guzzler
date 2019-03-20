@@ -44,7 +44,6 @@ class WithJson extends Base implements With
             $j1 = json_encode($body);
             $j2 = json_encode($this->json);
 
-           // die(var_dump(strpos($j1, trim($j2, '{}'))));
             return $this->exclusive
                 ? $j1 == $j2
                 : strpos($j1, trim($j2, '{}')) !== false;
