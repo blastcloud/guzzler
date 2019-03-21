@@ -7,16 +7,22 @@ use BlastCloud\Guzzler\Interfaces\With;
 class WithBody extends Base implements With
 {
     protected $body;
+    protected $exclusive;
 
-    public function withBody($body)
+    public function withBody($body, bool $exclusive = false)
     {
         $this->body = $body;
+        $this->exclusive = $exclusive;
     }
 
     public function __invoke(array $history): array
     {
         return array_filter($history, function ($call) {
-            return $call['request']->getBody() == $this->body;
+            $body = $call['request']->getBody();
+
+            return $this->exclusive
+                ? $body == $this->body
+                : strpos($body, $this->body) !== false;
         });
     }
 

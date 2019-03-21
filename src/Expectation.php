@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  * @method $this withJson(array $values, bool $exclusive = false)
  * @method $this withForm(array $form, bool $exclusive = false)
  * @method $this withFormField(string $key, $value)
+ * @method $this withBody($body, bool $exclusive = false)
  */
 class Expectation
 {
