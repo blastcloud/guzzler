@@ -16,7 +16,7 @@ class WithJson extends Base implements With
         $this->exclusive = $exclusive;
         // Pre-sort so it only needs to be done once.
         $this->json = $json;
-        $this->sort($json);
+        $this->sort($this->json);
     }
 
     protected function isAssoc(array $arr)
