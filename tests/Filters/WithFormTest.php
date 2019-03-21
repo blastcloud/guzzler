@@ -22,7 +22,7 @@ class WithFormTest extends TestCase
         $this->client = $this->guzzler->getClient();
     }
 
-    public function testForm()
+    public function testFormParamsContains()
     {
         $this->guzzler->queueResponse(new Response());
 
@@ -47,6 +47,29 @@ class WithFormTest extends TestCase
 
         $this->guzzler->assertLast(function ($expect) {
             return $expect->withFormField('doesntexist', 'Some value');
+        });
+    }
+
+    public function testFormParamsExclusive()
+    {
+        $this->guzzler->queueMany(new Response(), 2);
+
+        $form = [
+            'first' => 'value',
+            'second' => 'something else'
+        ];
+
+        $this->client->post('/aoiwoiu', [
+            'form_params' => $form + ['third' => 'different']
+        ]);
+
+        $this->client->post('/caowei', ['form_params' => $form]);
+
+        $this->guzzler->assertNotFirst(function ($e) use ($form) {
+            return $e->withForm($form, true);
+        });
+        $this->guzzler->assertLast(function ($e) use ($form) {
+            return $e->withForm($form, true);
         });
     }
 }

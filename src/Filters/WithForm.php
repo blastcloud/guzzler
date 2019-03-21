@@ -16,11 +16,13 @@ class WithForm extends Base implements With
         $this->form[$key] = $value;
     }
 
-    public function withForm(array $form)
+    public function withForm(array $form, bool $exclusive = false)
     {
         foreach ($form as $key => $value) {
             $this->withFormField($key, $value);
         }
+
+        $this->exclusive = $exclusive;
     }
 
     public function __invoke(array $history): array
