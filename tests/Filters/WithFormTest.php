@@ -72,4 +72,47 @@ class WithFormTest extends TestCase
             return $e->withForm($form, true);
         });
     }
+
+    public function testWithFormMultipart()
+    {
+        $this->guzzler->queueResponse(new Response());
+        $this->client->post('/aoweiu', [
+            'multipart' => [
+                [
+                    'name' => 'first',
+                    'contents' => 'value'
+                ],
+                [
+                    'name' => 'second',
+                    'contents' => 'another',
+                    'headers' => ['X-Baz' => 'best']
+                ],
+                [
+                    'name' => 'test-file',
+                    'contents' => fopen(__DIR__.'/../test-file.txt', 'r'),
+                    'filename' => 'rewrite-name.txt',
+                    'headers' => ['Heads' => 'up']
+                ],
+                [
+                    'name' => 'test-image',
+                    'contents' => fopen(__DIR__.'/../../Guzzler-logo.svg', 'r'),
+                    'filename' => 'overwrite.svg'
+                ]
+            ]
+        ]);
+
+        $this->guzzler->assertFirst(function ($e) {
+            return $e->withForm([
+                'second' => 'another',
+                'first' => 'value'
+            ]);
+        });
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp("/\bForm\b/");
+
+        $this->guzzler->assertFirst(function ($e) {
+            return $e->withFormField('third', 'doesnt exist');
+        });
+    }
 }

@@ -2,7 +2,10 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
+use BlastCloud\Guzzler\Helpers\Disposition;
 use BlastCloud\Guzzler\Interfaces\With;
+use GuzzleHttp\Psr7\MultipartStream;
+use BlastCloud\Guzzler\Helpers\Helpers;
 
 class WithForm extends Base implements With
 {
@@ -28,7 +31,17 @@ class WithForm extends Base implements With
     public function __invoke(array $history): array
     {
         return array_filter($history, function ($call) {
-            parse_str($call['request']->getBody(), $parsed);
+            $body = $call['request']->getBody();
+
+            if ($body instanceof MultipartStream) {
+                $parsed = [];
+                foreach ($this->parseMultipartBody($body) as $disp) {
+                    if (!$disp->isFile()) $parsed[$disp->name] = $disp->value;
+                }
+            } else {
+                parse_str($body, $parsed);
+            }
+
             return $this->testFields($this->form, $parsed, $this->exclusive);
         });
     }

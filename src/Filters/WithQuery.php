@@ -3,6 +3,7 @@
 namespace BlastCloud\Guzzler\Filters;
 
 use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Guzzler\Helpers\Helpers;
 
 class WithQuery extends Base implements With
 {

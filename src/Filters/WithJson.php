@@ -2,7 +2,6 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-
 use BlastCloud\Guzzler\Interfaces\With;
 
 class WithJson extends Base implements With
