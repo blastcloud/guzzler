@@ -89,7 +89,7 @@ class WithFormTest extends TestCase
                 ],
                 [
                     'name' => 'test-file',
-                    'contents' => fopen(__DIR__.'/../test-file.txt', 'r'),
+                    'contents' => fopen(__DIR__ . '/../testFiles/test-file.txt', 'r'),
                     'filename' => 'rewrite-name.txt',
                     'headers' => ['Heads' => 'up']
                 ],
