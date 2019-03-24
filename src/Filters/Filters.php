@@ -17,7 +17,7 @@ trait Filters
     public static function addNamespace(string $namespace)
     {
         if (!in_array($namespace, self::$namespaces)) {
-            self::$namespaces[] = $namespace;
+            array_unshift(self::$namespaces, $namespace);
         }
     }
 
