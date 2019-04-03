@@ -3,6 +3,7 @@
 namespace BlastCloud\Guzzler;
 
 use BlastCloud\Guzzler\Filters\Filters;
+use BlastCloud\Guzzler\Helpers\Macros;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
@@ -30,7 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class Expectation
 {
-    use Filters;
+    use Filters, Macros;
 
     /** @var Guzzler */
     protected $guzzler;
@@ -77,6 +78,10 @@ class Expectation
      */
     public function __call($name, $arguments)
     {
+        if ($this->runMacro($name, $this, $arguments)) {
+            return $this;
+        }
+
         // HTTP Verb convenience methods
         if (in_array($name, self::VERBS)) {
             return $this->endpoint($arguments[0], strtoupper($name));
