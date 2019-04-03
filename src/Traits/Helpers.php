@@ -1,8 +1,9 @@
 <?php
 
-namespace BlastCloud\Guzzler\Helpers;
+namespace BlastCloud\Guzzler\Traits;
 
 use GuzzleHttp\Psr7\MultipartStream;
+use BlastCloud\Guzzler\Helpers\Disposition;
 
 trait Helpers
 {

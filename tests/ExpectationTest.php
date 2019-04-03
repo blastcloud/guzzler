@@ -85,48 +85,6 @@ class ExpectationTest extends TestCase
         }
     }
 
-    public function testSynchronous()
-    {
-        $this->guzzler->queueMany(new Response(), 2);
-
-        $this->guzzler->expects($this->once())
-            ->synchronous();
-
-        // First test a passing call
-        $this->client->get('/a-url');
-
-        // Now test a failing call
-        $this->client->getAsync('/anywhere')->wait();
-
-        $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bsynchronous\b/");
-
-        $this->guzzler->assertLast(function (Expectation $e) {
-            return $e->synchronous();
-        });
-    }
-
-    public function testAsynchronous()
-    {
-        $this->guzzler->queueMany(new Response(), 2);
-
-        $this->guzzler->expects($this->once())
-            ->asynchronous();
-
-        // First test a passing call
-        $this->client->getAsync('/woeiwj')->wait();
-
-        // Now test a failing call
-        $this->client->get('/somewhere');
-
-        $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bsynchronous\b/");
-
-        $this->guzzler->assertLast(function (Expectation $e) {
-            return $e->asynchronous();
-        });
-    }
-
     public function testFailureWhenWithNotFound()
     {
         $this->expectException(\Error::class);

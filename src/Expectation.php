@@ -3,12 +3,12 @@
 namespace BlastCloud\Guzzler;
 
 use BlastCloud\Guzzler\Filters\Filters;
-use BlastCloud\Guzzler\Helpers\Macros;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
+use BlastCloud\Guzzler\Traits\Macros;
+use PHPUnit\Framework\{
+    Assert, ExpectationFailedException, TestCase
+};
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class Expectation
@@ -82,11 +82,6 @@ class Expectation
             return $this;
         }
 
-        // HTTP Verb convenience methods
-        if (in_array($name, self::VERBS)) {
-            return $this->endpoint($arguments[0], strtoupper($name));
-        }
-
         // Next try to see if it's a with* method we can use.
         if ($filter = $this->isFilter($name)) {
             $filter->add($name, $arguments);
@@ -94,18 +89,6 @@ class Expectation
         }
 
         throw new \Error(sprintf("Call to undefined method %s::%s()", __CLASS__, $name));
-    }
-
-    public function synchronous()
-    {
-        return $this->withOption('synchronous', true);
-    }
-
-    public function asynchronous()
-    {
-        // Set to null, because if the request was asynchronous, the
-        // "synchronous" key is not set in the options array.
-        return $this->withOption('synchronous', null);
     }
 
     /**
