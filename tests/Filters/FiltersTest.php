@@ -47,4 +47,13 @@ class FiltersTest extends TestCase
 
         $this->assertEquals($body, WithBody::$bodyString);
     }
+
+    public function testAddNamespaceAndNamespaces()
+    {
+        $this->assertCount(2, Expectation::namespaces());
+
+        Expectation::addNamespace('GuzzleHttp');
+
+        $this->assertContains('GuzzleHttp', Expectation::namespaces());
+    }
 }

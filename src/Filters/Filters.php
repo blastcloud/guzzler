@@ -22,6 +22,16 @@ trait Filters
     }
 
     /**
+     * Return the array of namespaces to search through for With* filters.
+     *
+     * @return array
+     */
+    public static function namespaces()
+    {
+        return self::$namespaces;
+    }
+
+    /**
      * Determine if the method called is a filter, a.k.a. starts with "with".
      *
      * @param $name
