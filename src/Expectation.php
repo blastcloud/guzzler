@@ -13,6 +13,7 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
 /**
  * Class Expectation
  * @package Guzzler
+ * @method $this endpoint(string $uri, string $method)
  * @method $this get(string $uri)
  * @method $this post(string $uri)
  * @method $this put(string $uri)
@@ -28,6 +29,7 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
  * @method $this withForm(array $form, bool $exclusive = false)
  * @method $this withFormField(string $key, $value)
  * @method $this withBody($body, bool $exclusive = false)
+ * @method $this withEndpoint(string $uri, string $method)
  */
 class Expectation
 {
@@ -60,13 +62,6 @@ class Expectation
     {
         $this->times = $times;
         $this->guzzler = $guzzler;
-    }
-
-    public function endpoint(string $uri, string $method)
-    {
-        $this->isFilter('withEndpoint')->add('endpoint', [$uri, $method]);
-
-        return $this;
     }
 
     /**

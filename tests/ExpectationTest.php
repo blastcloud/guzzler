@@ -4,7 +4,6 @@ namespace tests;
 
 use GuzzleHttp\Psr7\Response;
 use BlastCloud\Guzzler\{Expectation, UsesGuzzler};
-use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 
 class ExpectationTest extends TestCase
@@ -74,15 +73,6 @@ class ExpectationTest extends TestCase
 
         $this->guzzler->expects($this->never())
             ->something('/a-url');
-    }
-
-    public function testEachConvenienceVerbMethodDoesntErr()
-    {
-        $expectation = $this->guzzler->expects($this->never());
-
-        foreach (Expectation::VERBS as $verb) {
-            $expectation->$verb('/a-url');
-        }
     }
 
     public function testFailureWhenWithNotFound()

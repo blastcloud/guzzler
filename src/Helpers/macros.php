@@ -14,6 +14,10 @@ Expectation::macro('asynchronous', function (Expectation $e) {
 
 foreach (Expectation::VERBS as $verb) {
     Expectation::macro($verb, function (Expectation $e, $uri) use ($verb) {
-        return $e->endpoint($uri, strtoupper($verb));
+        return $e->withEndpoint($uri, strtoupper($verb));
     });
 }
+
+Expectation::macro('endpoint', function (Expectation $e, $url, $method) {
+    return $e->withEndpoint($url, strtoupper($method));
+});

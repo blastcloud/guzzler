@@ -84,4 +84,13 @@ class MacrosTest extends TestCase
             return $e->synchronous();
         });
     }
+
+    public function testEachConvenienceVerbMethodDoesntErr()
+    {
+        $expectation = $this->guzzler->expects($this->never());
+
+        foreach (Expectation::VERBS as $verb) {
+            $expectation->$verb('/a-url');
+        }
+    }
 }
