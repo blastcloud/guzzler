@@ -30,6 +30,8 @@ class Guzzler
 
         $history = Middleware::history($this->history);
         $this->handlerStack->push($history);
+
+        require_once __DIR__.'/Helpers/macros.php';
     }
 
     /**

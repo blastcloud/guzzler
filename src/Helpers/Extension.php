@@ -10,7 +10,7 @@ final class Extension implements BeforeFirstTestHook
     const NAMESPACE = 'GuzzlerFilterNamespace';
     const MACRO_FILE = 'GuzzlerMacroFile';
 
-    protected $macroFiles = [__DIR__ . DIRECTORY_SEPARATOR . 'macros.php'];
+    protected $macroFiles = [];
 
     /**
      * @throws \Exception
