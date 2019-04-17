@@ -15,7 +15,7 @@
 
 > Full Documentation at [guzzler.dev](https://guzzler.dev)
 
-Supercharge your unit tests that use Guzzle with a mock-like syntax. Guzzler covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
+Supercharge your app with a testing library specifically for Guzzle. Guzzler covers the process of setting up a mock handler, recording history of requests, and provides several convenience methods for creating expectations and assertions on that history.
 
 ## Installation
 
