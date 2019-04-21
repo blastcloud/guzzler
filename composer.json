@@ -21,7 +21,10 @@
         "psr-4": {
             "BlastCloud\\Guzzler\\": "src/",
             "tests\\": "tests/"
-        }
+        },
+        "files": [
+            "src/Helpers/macros.php"
+        ]
     },
     "prefer-stable": true,
     "require-dev": {

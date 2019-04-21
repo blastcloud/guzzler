@@ -12,7 +12,7 @@ Expectation::macro('asynchronous', function (Expectation $e) {
     return $e->withOption('synchronous', null);
 });
 
-foreach (Expectation::VERBS as $verb) {
+foreach (Expectation::VERBS as $verb) { // @codeCoverageIgnore
     Expectation::macro($verb, function (Expectation $e, $uri) use ($verb) {
         return $e->withEndpoint($uri, strtoupper($verb));
     });

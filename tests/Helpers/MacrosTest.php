@@ -93,4 +93,42 @@ class MacrosTest extends TestCase
             $expectation->$verb('/a-url');
         }
     }
+
+    public function testOverrideInline()
+    {
+        Expectation::macro('original', function ($e) {
+            return $e->will(new Response());
+        });
+
+        $this->assertEquals(0, $this->guzzler->queueCount());
+
+        $this->guzzler->expects($this->never())
+            ->original();
+
+        $this->assertEquals(1, $this->guzzler->queueCount());
+
+        Expectation::macro('original', function ($e) {
+            return $e->will(new Response(), 5);
+        });
+
+        $this->guzzler->expects($this->never())
+            ->original();
+
+        $this->assertEquals(6, $this->guzzler->queueCount());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testOverrideProvidedMacro()
+    {
+        Expectation::macro('synchronous', function ($e) {
+            return $e->will(new Response(), 10);
+        });
+
+        $this->guzzler->expects($this->never())
+            ->synchronous();
+
+        $this->assertEquals(10, $this->guzzler->queueCount());
+    }
 }
