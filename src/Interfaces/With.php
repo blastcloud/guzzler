@@ -2,7 +2,11 @@
 
 namespace BlastCloud\Guzzler\Interfaces;
 
-
+/**
+ * Interface With
+ * @package BlastCloud\Guzzler\Interfaces
+ * @codeCoverageIgnore
+ */
 interface With
 {
     /**

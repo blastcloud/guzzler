@@ -10,7 +10,7 @@ class WithEndpoint extends Base implements With
     public $endpoint;
     protected $method;
 
-    public function endpoint(string $uri, string $method)
+    public function withEndpoint(string $uri, string $method)
     {
         $this->endpoint = Uri::fromParts(parse_url($uri));
         $this->method = $method;

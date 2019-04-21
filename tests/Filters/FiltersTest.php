@@ -7,8 +7,7 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use tests\testFiles\WithBody;
-use tests\testFiles\WithTest;
+use tests\testFiles\{WithBody, WithTest};
 
 class FiltersTest extends TestCase
 {
@@ -22,7 +21,6 @@ class FiltersTest extends TestCase
         parent::setUp();
 
         $this->client = $this->guzzler->getClient();
-        Expectation::addNamespace('tests\\testFiles');
     }
 
     public function testAddNamespace()
@@ -48,5 +46,14 @@ class FiltersTest extends TestCase
         $this->client->post('/aow', ['body' => $body]);
 
         $this->assertEquals($body, WithBody::$bodyString);
+    }
+
+    public function testAddNamespaceAndNamespaces()
+    {
+        $this->assertCount(2, Expectation::namespaces());
+
+        Expectation::addNamespace('GuzzleHttp');
+
+        $this->assertContains('GuzzleHttp', Expectation::namespaces());
     }
 }

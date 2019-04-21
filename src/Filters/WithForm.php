@@ -2,10 +2,9 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-use BlastCloud\Guzzler\Helpers\Disposition;
 use BlastCloud\Guzzler\Interfaces\With;
 use GuzzleHttp\Psr7\MultipartStream;
-use BlastCloud\Guzzler\Helpers\Helpers;
+Use BlastCloud\Guzzler\Traits\Helpers;
 
 class WithForm extends Base implements With
 {

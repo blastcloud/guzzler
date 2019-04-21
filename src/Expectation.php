@@ -3,16 +3,17 @@
 namespace BlastCloud\Guzzler;
 
 use BlastCloud\Guzzler\Filters\Filters;
-use BlastCloud\Guzzler\Helpers\Macros;
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\ExpectationFailedException;
+use BlastCloud\Guzzler\Traits\Macros;
+use PHPUnit\Framework\{
+    Assert, ExpectationFailedException, TestCase
+};
 use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class Expectation
  * @package Guzzler
+ * @method $this endpoint(string $uri, string $method)
  * @method $this get(string $uri)
  * @method $this post(string $uri)
  * @method $this put(string $uri)
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  * @method $this withForm(array $form, bool $exclusive = false)
  * @method $this withFormField(string $key, $value)
  * @method $this withBody($body, bool $exclusive = false)
+ * @method $this withEndpoint(string $uri, string $method)
  */
 class Expectation
 {
@@ -62,13 +64,6 @@ class Expectation
         $this->guzzler = $guzzler;
     }
 
-    public function endpoint(string $uri, string $method)
-    {
-        $this->isFilter('withEndpoint')->add('endpoint', [$uri, $method]);
-
-        return $this;
-    }
-
     /**
      * This is used exclusively for the convenience verb methods.
      *
@@ -82,11 +77,6 @@ class Expectation
             return $this;
         }
 
-        // HTTP Verb convenience methods
-        if (in_array($name, self::VERBS)) {
-            return $this->endpoint($arguments[0], strtoupper($name));
-        }
-
         // Next try to see if it's a with* method we can use.
         if ($filter = $this->isFilter($name)) {
             $filter->add($name, $arguments);
@@ -94,18 +84,6 @@ class Expectation
         }
 
         throw new \Error(sprintf("Call to undefined method %s::%s()", __CLASS__, $name));
-    }
-
-    public function synchronous()
-    {
-        return $this->withOption('synchronous', true);
-    }
-
-    public function asynchronous()
-    {
-        // Set to null, because if the request was asynchronous, the
-        // "synchronous" key is not set in the options array.
-        return $this->withOption('synchronous', null);
     }
 
     /**

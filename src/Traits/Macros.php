@@ -1,6 +1,6 @@
 <?php
 
-namespace BlastCloud\Guzzler\Helpers;
+namespace BlastCloud\Guzzler\Traits;
 
 use BlastCloud\Guzzler\Expectation;
 use Closure;

@@ -1,6 +1,6 @@
 {
     "name": "blastcloud/guzzler",
-    "description": "Supercharge your unit tests that use Guzzle with a mock-like syntax.",
+    "description": "Supercharge your app with a testing library specifically for Guzzle.",
     "keywords": ["guzzle", "phpunit", "testing", "php", "mock"],
     "license": "MIT",
     "type": "library",
@@ -21,7 +21,10 @@
         "psr-4": {
             "BlastCloud\\Guzzler\\": "src/",
             "tests\\": "tests/"
-        }
+        },
+        "files": [
+            "src/Helpers/macros.php"
+        ]
     },
     "prefer-stable": true,
     "require-dev": {
