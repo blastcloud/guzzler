@@ -1,6 +1,6 @@
 {
     "name": "blastcloud/guzzler",
-    "description": "Supercharge your app with a testing library specifically for Guzzle.",
+    "description": "Supercharge your app or SDK with a testing library specifically for Guzzle.",
     "keywords": ["guzzle", "phpunit", "testing", "php", "mock"],
     "license": "MIT",
     "type": "library",
@@ -28,6 +28,5 @@
     },
     "prefer-stable": true,
     "require-dev": {
-        "codeclimate/php-test-reporter": "^0.4.4"
     }
 }

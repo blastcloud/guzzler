@@ -9,17 +9,19 @@ env:
   matrix:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS=""
+  global:
+    - CC_TEST_REPORTER_ID=5c94d8e0c60b910f6aae41f3b835f5e9798fc14b8a5624354623a894ec7164cf
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
 
 before_script:
   - travis_retry composer update
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
   - vendor/bin/phpunit
 
 after_script:
   - vendor/bin/test-reporter
-
-addons:
-  code_climate:
-    repo_token:
-      secure: "QfpcQELpr9c/wZrn+DBRGcyk5iA/0QoHbMWGZSmX9pUqlM1JCFWUlEYNzKKzG5CSzoSrz8CrGQS90kxedVeoV7tzb0RuU6WpDxrCHKn2ijbD7FEd2RpLQwUuGiOb9rMLomRT0SyGZM+dHmKK19aZWq/ZDgvgsglTBM7z1i/N8BQ6plBWqaJ3w44/rmVBydGtpg+X5H+5Kb5jdPaqFT5gvl1EieSsC6arbOuMS4y8wxGeyiKEQ5H3kQmRr2Rs8vhJsQ0bAzGf6VuQjwwfJgEEaumd10+i0HivFECeBk7BwObQ9pjzRaKjxYkoUyKWKritK4geIlnaMZiQVAG3hM1OB4eEURW5hTjXkgRiFKk9xvnGxLNvFe5Tpg1TKf73hwE2FTAFJRt481y8Vw0Ie6CmvJIlwRIFvBgNL61HqR7VZDnAyJOIhX6eUSuhMw99nowsAmOSEnM/OICCHW36F+dvoFZyzgxwlAvsB+9gJfztd4OorE/m8Cunh/LlZh1IosiIduimKXZe26hTuT9QtWXCRn1Mfs/CWmgBhyM5bqJX73JHMZgY9DFf9YdDJEMLHFNb4G1pMMn528uRhiFyC6092Pcr0vtUTRsn9ayXAbYJnHup0LpHIvN23amP1vKIz1oJpCzj4Xl8x7eLl0ailDr95JMexDRferiJeCLM5t2USyo="
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
