@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 - Currently in the process of writing a `WithFile` filter. As might be expected, there are lots of gotchas associated with file work. Hope to have this one out in another release some time in the next week or two. (Now being 2019-03-24)
 - I also plan to write and release a road map document on the docs site outlining where I want to go with the next project, tentatively called `Drive`, that will work with Guzzler. The short description of it is, "Response factories based on Swagger, RAML, or API Blueprint docs".
 
+## [1.4.2] - 2019-04-21
+- Fix to move macros file loaded via composer. Includes test to ensure provided macros can be overridden.
+
 ## [1.4.1] - 2019-04-04
 - Fix for possibility that Guzzler macros were not loaded because the extension may not be added to a project that was pre-existing.
 
