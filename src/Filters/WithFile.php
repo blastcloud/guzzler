@@ -2,7 +2,7 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-use BlastCloud\Guzzler\Helpers\Helpers;
+use BlastCloud\Guzzler\Traits\Helpers;
 use BlastCloud\Guzzler\Interfaces\With;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Stream;
@@ -16,11 +16,9 @@ class WithFile extends Base implements With
     protected $mime;
     protected $exclusive = false;
 
-    public function withFile($formField, $file, $filename = null, $mime = null)
+    public function withFile($formField, $file)
     {
         $this->files[$formField] = $file;
-        $this->fileName = $filename ?? $this->fileName;
-        $this->mime = $mime ?? $this->mime;
     }
 
     public function withFileName($filename)
@@ -44,34 +42,7 @@ class WithFile extends Base implements With
 
     protected function filterByFieldsAndFileContents($dispositions)
     {
-        $fields = $this->pluck('name', $dispositions);
-
-        foreach ($this->files as $field => $file) {
-            // Field Names
-            if (!in_array($field, $fields)) {
-                return false;
-            }
-
-            // Resources
-            if (is_resource($file)) {
-                $f = stream_get_contents($file);
-                fclose($file);
-                $file = $f;
-            }
-
-            // File name passed
-            if (realpath($file)) {
-                $file = file_get_contents($file);
-            }
-
-            foreach ($dispositions as $d) {
-                if ($d->value == $file) {
-                    return true;
-                }
-            }
-        }
-
-        return null;
+        //die(var_dump($dispositions));
     }
 
     public function __invoke(array $history): array
@@ -79,13 +50,12 @@ class WithFile extends Base implements With
         return array_filter($history, function ($item) {
             $body = $item['request']->getBody();
 
-            if (!$body instanceof MultipartStream
-                && !$body instanceof Stream) {
+            if (!$body instanceof MultipartStream) {
                 return false;
             }
 
             $dispositions = array_filter($this->parseMultipartBody($body), function ($d) {
-                return $d; //$d->isFile();
+                return $d->isFile();
             });
 
             $res = $this->filterByFieldsAndFileContents($dispositions);

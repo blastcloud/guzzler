@@ -4,12 +4,12 @@ namespace BlastCloud\Guzzler\Helpers;
 
 class Disposition
 {
-    public $value;
-    public $filename;
-    public $contentType;
-    public $contentLength;
-    public $name;
-    public $headers = [];
+    protected $value;
+    protected $filename;
+    protected $contentType;
+    protected $contentLength;
+    protected $name;
+    protected $headers = [];
 
     public function __construct(string $body)
     {
@@ -36,18 +36,25 @@ class Disposition
         $this->value = substr($body, strlen($body) - $this->contentLength);
     }
 
+    public function __get($name)
+    {
+        return $this->$name ?? null;
+    }
+
     public function isFile(): bool
     {
-        return !empty($this->contentType);
+        return !empty($this->contentType) || !empty($this->filename);
     }
 
     protected function content_disposition($line)
     {
-        preg_match("/name=\"(.+)\"/", $line, $matches);
-        $this->name = $matches[1];
+        foreach (explode(';', $line) as $datum) {
+            $parts = explode('=', trim($datum));
 
-        preg_match("/filename=\"(.+)\"/", $line, $matches);
-        $this->filename = $matches[1] ?? null;
+            if (property_exists($this, $parts[0])) {
+                $this->{$parts[0]} = trim($parts[1], '"');
+            }
+        }
     }
 
     protected function content_length($line)
