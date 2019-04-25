@@ -15,7 +15,7 @@ class WithFileTest extends TestCase
     /** @var Client */
     public $client;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
