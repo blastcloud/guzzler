@@ -46,4 +46,25 @@ trait Helpers
             return new Disposition($item);
         }, $dispositions);
     }
+
+    /**
+     * Given an array of objects or arrays, return every instance of a
+     * specified field. Any empty values are eliminated.
+     *
+     * @param array $collection
+     * @param string $property
+     * @return array
+     */
+    public function pluck(array $collection, string $property)
+    {
+        return array_filter(
+            array_map(function ($item) use ($property) {
+                if (is_object($item)) {
+                    return $item->$property ?? null;
+                }
+
+                return $item[$property] ?? null;
+            }, $collection)
+        );
+    }
 }

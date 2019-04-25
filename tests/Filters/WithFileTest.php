@@ -5,6 +5,7 @@ namespace tests\Filters;
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use PHPUnit\Framework\TestCase;
 
 class WithFileTest extends TestCase
@@ -21,7 +22,7 @@ class WithFileTest extends TestCase
         $this->client = $this->guzzler->getClient();
     }
 
-    public function testWithFileEliminatesNoFile()
+    public function testMultipartEliminatesNoFile()
     {
         $this->guzzler->expects($this->never())
             ->withFile('first', 'something')
@@ -37,31 +38,43 @@ class WithFileTest extends TestCase
         ]);
     }
 
+    public function testWithoutMultipart()
+    {
+        $this->guzzler->expects($this->never())
+            ->withFile('first', 'something')
+            ->will(new Response());
+
+        $this->client->post('/aoweiu', [
+            'form_params' => [
+                'first' => 'something'
+            ]
+        ]);
+    }
+
     public function testWithFileUsingStringResourceAndFileLocation()
     {
         $this->guzzler->queueResponse(new Response());
         $location = realpath(__DIR__.'/../testFiles/test-file.txt');
 
         $this->client->post('/awoeiu', [
-            [
-                'name' => 'file',
-                'contents' => fopen($location, 'r')
+            'multipart' => [
+                [
+                    'name' => 'file',
+                    'contents' => fopen($location, 'r'),
+                    'filename' => 'spikity-spockity.txt'
+                ],
+                [
+                    'name' => 'file2',
+                    'contents' => new Stream(fopen($location, 'r'))
+                ]
             ]
         ]);
 
         // Resource
         $this->guzzler->assertFirst(function ($e) use ($location) {
-            return $e->withFile('file', fopen($location, 'r'));
-        });
-
-        // Contents String
-        $this->guzzler->assertFirst(function ($e) use ($location) {
-            return $e->withFile('file', file_get_contents($location));
-        });
-
-        // File Location
-        $this->guzzer->assertFirst(function ($e) use ($location) {
-            return $e->withFile('file', $location);
+            return $e->withFile('file', fopen($location, 'r'))
+                ->withFileName('spikity-spockity.txt')
+                ->withFileMime('text/plain');
         });
     }
 }

@@ -16,7 +16,7 @@ class Disposition
         foreach (preg_split("/((\r?\n)|(\r\n?))/", $body) as $line) {
             // There is a blank line between fields and the value of the disposition.
             if(empty($line)) {
-                break;
+                continue;
             }
 
             $start = strtok($line, ':');

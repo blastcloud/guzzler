@@ -5,7 +5,6 @@ namespace BlastCloud\Guzzler\Filters;
 use BlastCloud\Guzzler\Traits\Helpers;
 use BlastCloud\Guzzler\Interfaces\With;
 use GuzzleHttp\Psr7\MultipartStream;
-use GuzzleHttp\Psr7\Stream;
 
 class WithFile extends Base implements With
 {
@@ -15,6 +14,8 @@ class WithFile extends Base implements With
     protected $fileName;
     protected $mime;
     protected $exclusive = false;
+
+    protected const METHODS = ['files', 'fileName', 'mime'];
 
     public function withFile($formField, $file)
     {
@@ -40,9 +41,19 @@ class WithFile extends Base implements With
         $this->exclusive = $exclusive;
     }
 
-    protected function filterByFieldsAndFileContents($dispositions)
+    protected function files($dispositions)
     {
-        //die(var_dump($dispositions));
+        return true;
+    }
+
+    protected function fileName($dispositions)
+    {
+        return in_array($this->fileName, $this->pluck($dispositions, 'filename'));
+    }
+
+    protected function mime($dispositions)
+    {
+        return in_array($this->mime, $this->pluck($dispositions, 'contentType'));
     }
 
     public function __invoke(array $history): array
@@ -58,22 +69,24 @@ class WithFile extends Base implements With
                 return $d->isFile();
             });
 
-            $res = $this->filterByFieldsAndFileContents($dispositions);
-            if ($res !== null) {
-                return $res;
+            if (empty($dispositions)) {
+                return false;
             }
 
+            foreach (self::METHODS as $var) {
+                if (!empty($this->$var) && !$this->{$var}($dispositions)) {
+                    return false;
+                }
+            }
 
-
-
-            return false;
+            return true;
         });
     }
 
     public function __toString(): string
     {
         $e = $this->exclusive ? 'true' : 'false';
-        $str = "File: (Exclusive: {$e})".json_encode($this->files);
+        $str = "File: (Exclusive: {$e}) ".json_encode($this->files, JSON_PRETTY_PRINT);
 
         if (!empty($this->fileName)) {
             $str .= "\n" . str_pad("FileName:", self::STR_PAD) . $this->fileName;
