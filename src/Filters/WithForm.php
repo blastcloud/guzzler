@@ -30,15 +30,13 @@ class WithForm extends Base implements With
     public function __invoke(array $history): array
     {
         return array_filter($history, function ($call) {
-            $body = $call['request']->getBody();
-
-            if ($body instanceof MultipartStream) {
+            if (isset($call['dispositions'])) {
                 $parsed = [];
-                foreach ($this->parseMultipartBody($body) as $disp) {
-                    if (!$disp->isFile()) $parsed[$disp->name] = $disp->value;
+                foreach ($call['dispositions'] as $disp) {
+                    if (!$disp->isFile()) $parsed[$disp->name] = $disp->contents;
                 }
             } else {
-                parse_str($body, $parsed);
+                parse_str($call['request']->getBody(), $parsed);
             }
 
             return $this->testFields($this->form, $parsed, $this->exclusive);

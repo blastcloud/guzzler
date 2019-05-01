@@ -2,21 +2,31 @@
 
 namespace BlastCloud\Guzzler\Helpers;
 
+/**
+ * Class Disposition
+ * @package BlastCloud\Guzzler\Helpers
+ * @property-read string|null $contents
+ * @property-read string|null $contentType
+ * @property-read int $contentLength;
+ * @property-read string|null $filename
+ * @property-read array|null $headers
+ * @property-read string $name
+ */
 class Disposition
 {
-    protected $value;
-    protected $filename;
+    protected $contents;
     protected $contentType;
     protected $contentLength;
-    protected $name;
+    protected $filename;
     protected $headers = [];
+    protected $name;
 
     public function __construct(string $body)
     {
         foreach (preg_split("/((\r?\n)|(\r\n?))/", $body) as $line) {
             // There is a blank line between fields and the value of the disposition.
             if(empty($line)) {
-                continue;
+                break;
             }
 
             $start = strtok($line, ':');
@@ -33,7 +43,7 @@ class Disposition
             $this->headers[$start] = $end;
         }
 
-        $this->value = substr($body, strlen($body) - $this->contentLength);
+        $this->contents = substr($body, strlen($body) - $this->contentLength);
     }
 
     public function __get($name)
@@ -43,7 +53,7 @@ class Disposition
 
     public function isFile(): bool
     {
-        return !empty($this->contentType) || !empty($this->filename);
+        return !empty($this->filename);
     }
 
     protected function content_disposition($line)

@@ -39,6 +39,8 @@ class Guzzler
      */
     protected function runExpectations()
     {
+        $this->parseDispositions();
+
         foreach ($this->expectations as $expectation) {
             $expectation($this->testInstance, $this->history);
         }

@@ -2,19 +2,12 @@
 
 namespace BlastCloud\Guzzler\Traits;
 
-use GuzzleHttp\Psr7\MultipartStream;
-use BlastCloud\Guzzler\Helpers\Disposition;
-
 trait Helpers
 {
     public function testFields(array $fields, array $parsed, $exclusive = false)
     {
         foreach ($fields as $key => $value) {
-            if (
-                !isset($parsed[$key])
-                || (is_array($parsed[$key]) && !in_array($value, $parsed[$key]))
-                || $parsed[$key] != $value
-            ) {
+            if ($this->arrayMissing($key, $value, $parsed)) {
                 return false;
             }
         }
@@ -27,24 +20,11 @@ trait Helpers
         return true;
     }
 
-    /**
-     * Using the MultipartStream, split all fields and values into an array
-     *
-     * @param MultipartStream $stream
-     * @return array
-     */
-    public function parseMultipartBody(MultipartStream $stream): array
+    public function arrayMissing($key, $value, array $haystack)
     {
-        // Split based on the boundary and any dashes Guzzle adds
-        $split = preg_split("/-*\b{$stream->getBoundary()}\b-*/", $stream->getContents(), 0, PREG_SPLIT_NO_EMPTY);
-
-        // Trim line breaks and delete empty values
-        $dispositions = array_filter(array_map(function ($dis) { return trim($dis);}, $split));
-
-        // Parse out the parts into keys and values
-        return array_map(function ($item) {
-            return new Disposition($item);
-        }, $dispositions);
+        return !isset($haystack[$key])
+            || (is_array($haystack[$key]) && !in_array($value, $haystack[$key]))
+            || $haystack[$key] != $value;
     }
 
     /**
@@ -59,11 +39,7 @@ trait Helpers
     {
         return array_filter(
             array_map(function ($item) use ($property) {
-                if (is_object($item)) {
-                    return $item->$property ?? null;
-                }
-
-                return $item[$property] ?? null;
+                return ((array)$item)[$property] ?? null;
             }, $collection)
         );
     }

@@ -2,15 +2,16 @@
 
 namespace BlastCloud\Guzzler;
 
+use BlastCloud\Guzzler\Traits\StreamFixer;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Assert;
 
 trait Assertions
 {
+    use StreamFixer;
+
     /** @var TestCase */
     protected $testInstance;
-
-    protected $history = [];
 
     protected function increment()
     {
@@ -104,6 +105,8 @@ trait Assertions
      */
     public function assertFirst(\Closure $closure, $message = null)
     {
+        $this->parseDispositions();
+
         $h = $this->runClosure(
             $this->findOrFailIndexes([0]),
             $closure,
@@ -125,6 +128,8 @@ trait Assertions
      */
     public function assertNotFirst(\Closure $closure, $message = null)
     {
+        $this->parseDispositions();
+
         $h = $this->runClosure(
             $this->findOrFailIndexes([0]),
             $closure,
@@ -147,10 +152,11 @@ trait Assertions
      *
      * @param \Closure $closure
      * @param null $message
-     * @throws UndefinedIndexException
      */
     public function assertLast(\Closure $closure, $message = null)
     {
+        $this->parseDispositions();
+
         $h = $this->runClosure(
             [$this->getLast()],
             $closure,
@@ -168,10 +174,11 @@ trait Assertions
      *
      * @param \Closure $closure
      * @param null $message
-     * @throws UndefinedIndexException
      */
     public function assertNotLast(\Closure $closure, $message = null)
     {
+        $this->parseDispositions();
+
         $h = $this->runClosure(
             [$this->getLast()],
             $closure,
@@ -197,6 +204,8 @@ trait Assertions
             throw new UndefinedIndexException("Guzzle history is currently empty.");
         }
 
+        $this->parseDispositions();
+
         $this->assertIndexes(array_keys($this->history), $closure, $message);
     }
 
@@ -210,6 +219,8 @@ trait Assertions
      */
     public function assertIndexes(array $indexes, \Closure $closure, $message = null)
     {
+        $this->parseDispositions();
+
         $h = $this->runClosure(
             $this->findOrFailIndexes($indexes),
             $closure,
@@ -234,6 +245,8 @@ trait Assertions
      */
     public function assertNotIndexes(array $indexes, \Closure $closure, $message = null)
     {
+        $this->parseDispositions();
+
         $h = $this->runClosure(
             $this->findOrFailIndexes($indexes),
             $closure,
@@ -258,6 +271,7 @@ trait Assertions
      */
     public function assertNone(\Closure $closure, $message = null)
     {
+        $this->parseDispositions();
         $this->assertNotIndexes(array_keys($this->history), $closure, $message);
     }
 }
