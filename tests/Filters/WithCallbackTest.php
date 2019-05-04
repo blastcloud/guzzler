@@ -4,7 +4,6 @@ namespace tests\Filters;
 
 use BlastCloud\Guzzler\Expectation;
 use BlastCloud\Guzzler\Filters\WithCallback;
-use BlastCloud\Guzzler\Helpers\File;
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
