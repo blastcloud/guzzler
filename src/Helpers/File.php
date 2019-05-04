@@ -77,7 +77,6 @@ class File implements \JsonSerializable
     {
         foreach (['contents', 'filename', 'contentType'] as $att) {
             if ($f = $this->get($att, $d) != $d->$att) {
-                die(var_dump($f, $d->$att));
                 return [$f, $d->$att];
             }
         }

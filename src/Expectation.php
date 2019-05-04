@@ -33,6 +33,7 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
  * @method $this withEndpoint(string $uri, string $method)
  * @method $this withFile(string $field, File $file)
  * @method $this withFiles(array $files, bool $exclusive = false)
+ * @method $this withCallback(\Closure $callback)
  */
 class Expectation
 {
