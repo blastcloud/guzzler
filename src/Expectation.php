@@ -3,6 +3,7 @@
 namespace BlastCloud\Guzzler;
 
 use BlastCloud\Guzzler\Filters\Filters;
+use BlastCloud\Guzzler\Helpers\File;
 use BlastCloud\Guzzler\Traits\Macros;
 use PHPUnit\Framework\{
     Assert, ExpectationFailedException, TestCase
@@ -30,6 +31,9 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
  * @method $this withFormField(string $key, $value)
  * @method $this withBody($body, bool $exclusive = false)
  * @method $this withEndpoint(string $uri, string $method)
+ * @method $this withFile(string $field, File $file)
+ * @method $this withFiles(array $files, bool $exclusive = false)
+ * @method $this withCallback(\Closure $callback)
  */
 class Expectation
 {

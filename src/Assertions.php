@@ -7,10 +7,10 @@ use PHPUnit\Framework\Assert;
 
 trait Assertions
 {
+    protected $history = [];
+
     /** @var TestCase */
     protected $testInstance;
-
-    protected $history = [];
 
     protected function increment()
     {
@@ -147,7 +147,6 @@ trait Assertions
      *
      * @param \Closure $closure
      * @param null $message
-     * @throws UndefinedIndexException
      */
     public function assertLast(\Closure $closure, $message = null)
     {
@@ -168,7 +167,6 @@ trait Assertions
      *
      * @param \Closure $closure
      * @param null $message
-     * @throws UndefinedIndexException
      */
     public function assertNotLast(\Closure $closure, $message = null)
     {

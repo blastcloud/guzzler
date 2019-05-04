@@ -34,8 +34,8 @@ class WithForm extends Base implements With
 
             if ($body instanceof MultipartStream) {
                 $parsed = [];
-                foreach ($this->parseMultipartBody($body) as $disp) {
-                    if (!$disp->isFile()) $parsed[$disp->name] = $disp->value;
+                foreach ($this->parseMultipartBody($body) as $d) {
+                    if (!$d->isFile()) $parsed[$d->name] = $d->contents;
                 }
             } else {
                 parse_str($body, $parsed);
