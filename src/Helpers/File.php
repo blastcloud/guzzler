@@ -47,10 +47,6 @@ class File implements \JsonSerializable
             fclose($f);
         }
 
-        if (!empty($file) && realpath($file)) {
-            $file = file_get_contents($file);
-        }
-
         return $file;
     }
 
@@ -60,7 +56,7 @@ class File implements \JsonSerializable
             throw new \InvalidArgumentException("The $name property does not exist on the File object.");
         }
 
-        if ($name == 'content') {
+        if ($name == 'contents') {
             $value = $this->resolveContent($value);
         }
 
@@ -81,6 +77,7 @@ class File implements \JsonSerializable
     {
         foreach (['contents', 'filename', 'contentType'] as $att) {
             if ($f = $this->get($att, $d) != $d->$att) {
+                die(var_dump($f, $d->$att));
                 return [$f, $d->$att];
             }
         }

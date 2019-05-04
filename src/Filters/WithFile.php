@@ -32,17 +32,27 @@ class WithFile extends Base implements With
     public function __invoke(array $history): array
     {
         return array_filter($history, function ($item) {
-            if (!isset($item['dispositions'])) {
+            $body = $item['request']->getBody();
+
+            if (!$body instanceof MultipartStream) {
                 return false;
             }
 
+            $dispositions = [];
+
+            foreach ($this->parseMultipartBody($body) as $d) {
+                if ($d->isFile()) {
+                    $dispositions[$d->name] = $d;
+                }
+            }
+
             foreach ($this->files as $name => $file) {
-                if (!isset($item['dispositions'][$name]) || !$file->compare($item['dispositions'][$name])) {
+                if (!isset($dispositions[$name]) || !$file->compare($dispositions[$name])) {
                     return false;
                 }
             }
 
-            return true;
+            return !$this->exclusive || count($dispositions) == count($this->files);
         });
     }
 
