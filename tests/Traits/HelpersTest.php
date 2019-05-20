@@ -9,7 +9,7 @@ class HelpersTest extends TestCase
 {
     public $instance;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
