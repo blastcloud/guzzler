@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 - I plan to write and release a road map document on the docs site outlining where I want to go with the next project, tentatively called `Drive`, that will work with Guzzler. The short description of it is, "Response factories based on Swagger, RAML, or API Blueprint docs".
 
+## [1.5.1]
+- Added the ability to add a custom error message for `withCallback`.
+- Fixed the `json_encode` formatting for the error message on `withQuery`.
+- Various updates to the documentation. 
+
 ## [1.5.0] - 2019-05-04
 - Added the `withFile` filter. Includes several new tests and a `File` helper object.
 - Added the `withCallback` filter which allows users to pass an arbitrary anonymous function to filter history items.

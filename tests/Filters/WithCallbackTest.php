@@ -60,4 +60,22 @@ class WithCallbackTest extends TestCase
             });
         });
     }
+
+    public function testFailureUserString()
+    {
+        $this->guzzler->queueResponse(new Response());
+
+        $this->client->get('/aowiuew');
+
+        $message = 'My custom callback message.';
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessage($message);
+
+        $this->guzzler->assertAll(function (Expectation $e) use ($message) {
+            return $e->withCallback(function ($history) {
+                return false;
+            }, $message);
+        });
+    }
 }

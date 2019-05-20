@@ -9,9 +9,13 @@ class WithCallback extends Base implements With
     /** @var \Closure */
     protected $closure;
 
-    public function withCallback(\Closure $closure)
+    /** @var string */
+    protected $message;
+
+    public function withCallback(\Closure $closure, $message = null)
     {
         $this->closure = $closure;
+        $this->message = $message;
     }
 
     public function __invoke(array $history): array
@@ -21,6 +25,6 @@ class WithCallback extends Base implements With
 
     public function __toString(): string
     {
-        return "Custom callback: \Closure";
+        return $this->message ?? "Custom callback: \Closure";
     }
 }

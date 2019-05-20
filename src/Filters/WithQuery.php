@@ -32,6 +32,6 @@ class WithQuery extends Base implements With
     public function __toString(): string
     {
         $e = $this->exclusive ? 'true' : 'false';
-        return "Query: (Exclusive: {$e})".json_encode($this->query);
+        return "Query: (Exclusive: {$e})".json_encode($this->query, JSON_PRETTY_PRINT);
     }
 }
