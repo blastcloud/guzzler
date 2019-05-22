@@ -21,6 +21,8 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
  * @method $this delete(string $uri)
  * @method $this patch(string $uri)
  * @method $this options(string $uri)
+ * @method $this synchronous()
+ * @method $this asynchronous()
  * @method $this withHeader(string $key, $value)
  * @method $this withHeaders(array $values)
  * @method $this withOption(string $key, $value)
@@ -33,7 +35,7 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
  * @method $this withEndpoint(string $uri, string $method)
  * @method $this withFile(string $field, File $file)
  * @method $this withFiles(array $files, bool $exclusive = false)
- * @method $this withCallback(\Closure $callback)
+ * @method $this withCallback(\Closure $callback, string $message = null)
  */
 class Expectation
 {
