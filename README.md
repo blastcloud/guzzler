@@ -6,8 +6,8 @@
     <a href="#">
         <img src="https://poser.pugx.org/blastcloud/guzzler/v/stable" />
     </a>
-    <a href="https://codeclimate.com/github/blastcloud/guzzler/test_coverage">
-        <img src="https://api.codeclimate.com/v1/badges/01c6f66eaa5db02e5411/test_coverage" />
+    <a href="https://packagist.org/packages/blastcloud/guzzler/stats">
+        <img src="https://poser.pugx.org/blastcloud/guzzler/downloads" />
     </a>
     <a href="https://codeclimate.com/github/blastcloud/guzzler/maintainability">
         <img src="https://api.codeclimate.com/v1/badges/01c6f66eaa5db02e5411/maintainability" />

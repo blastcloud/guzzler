@@ -1,8 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-- I plan to write and release a road map document on the docs site outlining where I want to go with the next project, tentatively called `Drive`, that will work with Guzzler. The short description of it is, "Response factories based on Swagger, RAML, or API Blueprint docs".
+## [1.5.2] - 2019-06-10
+- Fixed the deprecated/removed `ObjectInvocation` in PHPUnit 8.2 and above installations.
+  - Thanks `@llstarscreamll` for reporting the bug.
+
+## [Documentation ] Roadmap - 2019-06-06
+- Published the official road map for the future of the project.
+- Created associated Github issues for user feedback.
+    - Thanks `@jdreesen` for fixing incorrect syntax in the `Drive` proposal.
 
 ## [1.5.1] - 2019-05-20
 - Added the ability to add a custom error message for `withCallback`.
@@ -37,6 +43,7 @@ All notable changes to this project will be documented in this file.
 ## [1.2.0] - 2019-03-16
 - Added the new `withFormField` and `withForm` methods to the `Expectations` class.
 - Added the new `withJson` method to the `Expectations` class.
+    - Thanks `@satoved` for the idea and request.
 
 ## [1.1.0] - 2019-03-03
 - Added the new `synchronous` and `asynchronous` methods to the `Expectations` class.
