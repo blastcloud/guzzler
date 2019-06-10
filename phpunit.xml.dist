@@ -18,6 +18,7 @@
             <exclude>
                 <file>./src/UndefinedIndexException.php</file>
                 <file>./src/Helpers/Extension.php</file>
+                <directory>./src/Interfaces</directory>
             </exclude>
         </whitelist>
     </filter>
