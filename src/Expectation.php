@@ -5,10 +5,7 @@ namespace BlastCloud\Guzzler;
 use BlastCloud\Guzzler\Filters\Filters;
 use BlastCloud\Guzzler\Helpers\File;
 use BlastCloud\Guzzler\Traits\Macros;
-use PHPUnit\Framework\{
-    Assert, ExpectationFailedException, TestCase
-};
-use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\{Assert, ExpectationFailedException, TestCase};
 use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
 
 /**
@@ -46,6 +43,9 @@ class Expectation
 
     /** @var InvokedRecorder */
     protected $times;
+
+    protected const PHPUNIT_82 = 'PHPUnit\Framework\MockObject\Invocation';
+    protected const PHPUNIT_81 = 'PHPUnit\Framework\MockObject\Invocation\ObjectInvocation';
 
     /**
      * Each value in this array becomes a convenience method over endpoint().
@@ -139,8 +139,12 @@ class Expectation
      */
     public function __invoke(TestCase $instance, array $history): void
     {
+        $class = class_exists(self::PHPUNIT_82)
+            ? self::PHPUNIT_82
+            : self::PHPUNIT_81;
+
         foreach ($this->runFilters($history) as $i) {
-            $this->times->invoked(new ObjectInvocation('', '', [], '', $i['request']));
+            $this->times->invoked(new $class('', '', [], '', $i['request']));
         }
 
         try {
