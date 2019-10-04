@@ -4,8 +4,46 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4870e93a07a85eb595926798010669c",
+    "content-hash": "d04ca0ab1eb2ca6c11f5de5421d7dcbb",
     "packages": [
+        {
+            "name": "blastcloud/chassis",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blastcloud/chassis.git",
+                "reference": "d4e1d10e2a4b4058f36c22156f87cde6f8c4387f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blastcloud/chassis/zipball/d4e1d10e2a4b4058f36c22156f87cde6f8c4387f",
+                "reference": "d4e1d10e2a4b4058f36c22156f87cde6f8c4387f",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "phpunit/phpunit": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BlastCloud\\Chassis\\": "src",
+                    "tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Kelso",
+                    "email": "kelso.adam@gmail.com"
+                }
+            ],
+            "description": "A framework for building declarative HTTP client test libraries",
+            "time": "2019-09-06T03:40:13+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.2.0",

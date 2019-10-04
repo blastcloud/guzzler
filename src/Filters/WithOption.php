@@ -2,7 +2,8 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Interfaces\With;
+use BlastCloud\Chassis\Filters\Base;
 
 class WithOption extends Base implements With
 {

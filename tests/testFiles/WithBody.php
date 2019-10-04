@@ -3,7 +3,7 @@
 namespace tests\testFiles;
 
 use BlastCloud\Guzzler\Filters\WithBody as Base;
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Interfaces\With;
 use BlastCloud\Guzzler\UsesGuzzler;
 
 class WithBody extends Base implements With

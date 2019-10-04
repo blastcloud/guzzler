@@ -2,10 +2,10 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-use BlastCloud\Guzzler\Helpers\Disposition;
-use BlastCloud\Guzzler\Helpers\File;
-use BlastCloud\Guzzler\Traits\Helpers;
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Helpers\File;
+use BlastCloud\Chassis\Traits\Helpers;
+use BlastCloud\Chassis\Interfaces\With;
+use BlastCloud\Chassis\Filters\Base;
 use GuzzleHttp\Psr7\MultipartStream;
 
 class WithFile extends Base implements With
@@ -40,11 +40,13 @@ class WithFile extends Base implements With
 
             $dispositions = [];
 
-            foreach ($this->parseMultipartBody($body) as $d) {
+            foreach ($this->parseMultipartBody($body->getContents(), $body->getBoundary()) as $d) {
                 if ($d->isFile()) {
                     $dispositions[$d->name] = $d;
                 }
             }
+
+            $body->rewind();
 
             foreach ($this->files as $name => $file) {
                 if (!isset($dispositions[$name]) || !$file->compare($dispositions[$name])) {

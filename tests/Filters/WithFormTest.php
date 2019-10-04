@@ -2,6 +2,7 @@
 
 namespace tests\Filters;
 
+use BlastCloud\Guzzler\Expectation;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use BlastCloud\Guzzler\UsesGuzzler;
@@ -101,7 +102,7 @@ class WithFormTest extends TestCase
             ]
         ]);
 
-        $this->guzzler->assertFirst(function ($e) {
+        $this->guzzler->assertFirst(function (Expectation $e) {
             return $e->withForm([
                 'second' => 'another',
                 'first' => 'value'
@@ -111,7 +112,7 @@ class WithFormTest extends TestCase
         $this->expectException(AssertionFailedError::class);
         $this->expectExceptionMessageRegExp("/\bForm\b/");
 
-        $this->guzzler->assertFirst(function ($e) {
+        $this->guzzler->assertFirst(function (Expectation $e) {
             return $e->withFormField('third', 'doesnt exist');
         });
     }

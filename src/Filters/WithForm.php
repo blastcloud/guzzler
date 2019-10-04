@@ -2,9 +2,10 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Interfaces\With;
 use GuzzleHttp\Psr7\MultipartStream;
-Use BlastCloud\Guzzler\Traits\Helpers;
+use BlastCloud\Chassis\Traits\Helpers;
+use BlastCloud\Chassis\Filters\Base;
 
 class WithForm extends Base implements With
 {
@@ -34,14 +35,15 @@ class WithForm extends Base implements With
 
             if ($body instanceof MultipartStream) {
                 $parsed = [];
-                foreach ($this->parseMultipartBody($body) as $d) {
+                foreach ($this->parseMultipartBody($body->getContents(), $body->getBoundary()) as $d) {
                     if (!$d->isFile()) $parsed[$d->name] = $d->contents;
                 }
+                $body->rewind();
             } else {
                 parse_str($body, $parsed);
             }
 
-            return $this->testFields($this->form, $parsed, $this->exclusive);
+            return $this->verifyFields($this->form, $parsed, $this->exclusive);
         });
     }
 

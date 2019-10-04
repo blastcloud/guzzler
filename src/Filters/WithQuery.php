@@ -2,8 +2,9 @@
 
 namespace BlastCloud\Guzzler\Filters;
 
-use BlastCloud\Guzzler\Interfaces\With;
-use BlastCloud\Guzzler\Traits\Helpers;
+use BlastCloud\Chassis\Interfaces\With;
+use BlastCloud\Chassis\Traits\Helpers;
+use BlastCloud\Chassis\Filters\Base;
 
 class WithQuery extends Base implements With
 {
@@ -25,7 +26,7 @@ class WithQuery extends Base implements With
     {
         return array_filter($history, function ($call) {
             parse_str($call['request']->getUri()->getQuery(), $parsed);
-            return $this->testFields($this->query, $parsed, $this->exclusive);
+            return $this->verifyFields($this->query, $parsed, $this->exclusive);
         });
     }
 

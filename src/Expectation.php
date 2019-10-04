@@ -2,11 +2,7 @@
 
 namespace BlastCloud\Guzzler;
 
-use BlastCloud\Guzzler\Filters\Filters;
-use BlastCloud\Guzzler\Helpers\File;
-use BlastCloud\Guzzler\Traits\Macros;
-use PHPUnit\Framework\{Assert, ExpectationFailedException, TestCase};
-use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
+use BlastCloud\Chassis\Helpers\File;
 
 /**
  * Class Expectation
@@ -34,144 +30,7 @@ use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
  * @method $this withFiles(array $files, bool $exclusive = false)
  * @method $this withCallback(\Closure $callback, string $message = null)
  */
-class Expectation
+class Expectation extends \BlastCloud\Chassis\Expectation
 {
-    use Filters, Macros;
 
-    /** @var Guzzler */
-    protected $guzzler;
-
-    /** @var InvokedRecorder */
-    protected $times;
-
-    protected const PHPUNIT_82 = 'PHPUnit\Framework\MockObject\Invocation';
-    protected const PHPUNIT_81 = 'PHPUnit\Framework\MockObject\Invocation\ObjectInvocation';
-
-    /**
-     * Each value in this array becomes a convenience method over endpoint().
-     */
-    public const VERBS = [
-        'get',
-        'post',
-        'put',
-        'delete',
-        'patch',
-        'options'
-    ];
-
-    /**
-     * Expectation constructor.
-     * @param null|InvokedRecorder $times
-     * @param null|Guzzler $guzzler
-     */
-    public function __construct($times = null, $guzzler = null)
-    {
-        $this->times = $times;
-        $this->guzzler = $guzzler;
-    }
-
-    /**
-     * This is used exclusively for the convenience verb methods.
-     *
-     * @param string $name
-     * @param $arguments
-     * @return $this
-     */
-    public function __call($name, $arguments)
-    {
-        if ($this->runMacro($name, $this, $arguments)) {
-            return $this;
-        }
-
-        // Next try to see if it's a with* method we can use.
-        if ($filter = $this->isFilter($name)) {
-            $filter->add($name, $arguments);
-            return $this;
-        }
-
-        throw new \Error(sprintf("Call to undefined method %s::%s()", __CLASS__, $name));
-    }
-
-    /**
-     * Set a follow through; either response, callable, or Exception.
-     *
-     * @param $response
-     * @param int $times
-     * @return $this
-     */
-    public function will($response, int $times = 1)
-    {
-        for ($i = 0; $i < $times; $i++) {
-            $this->guzzler->queueResponse($response);
-        }
-
-        return $this;
-    }
-
-    /**
-     * An alias of 'will'.
-     *
-     * @param $response
-     * @param int $times
-     * @return $this
-     */
-    public function willRespond($response, int $times = 1)
-    {
-        $this->will($response, $times);
-
-        return $this;
-    }
-
-    protected function runFilters(array $history)
-    {
-        foreach ($this->filters as $filter) {
-            $history = $filter($history);
-        }
-
-        return $history;
-    }
-
-    /**
-     * Iterate over the history and verify the invocations against it.
-     *
-     * @param TestCase $instance
-     * @param array $history
-     */
-    public function __invoke(TestCase $instance, array $history): void
-    {
-        $class = class_exists(self::PHPUNIT_82)
-            ? self::PHPUNIT_82
-            : self::PHPUNIT_81;
-
-        foreach ($this->runFilters($history) as $i) {
-            $this->times->invoked(new $class('', '', [], '', $i['request']));
-        }
-
-        try {
-            // Invocation Counts
-            $this->times->verify();
-        } catch (ExpectationFailedException $e) {
-            Assert::fail($e->getMessage() . ' ' . $this->__toString());
-        }
-    }
-
-    public function __toString()
-    {
-        $endpoint = $messages = '';
-
-        foreach ($this->filters as $filter) {
-            $messages .= $filter->__toString() . "\n";
-            if (property_exists($filter, 'endpoint')) {
-                $endpoint = $filter->endpoint;
-            }
-        }
-
-        return <<<MESSAGE
-
-
-Expectation: {$endpoint}
------------------------------
-{$messages}
-MESSAGE;
-    }
 }

@@ -2,7 +2,9 @@
 
 namespace tests\Filters;
 
+use BlastCloud\Guzzler\Expectation;
 use BlastCloud\Guzzler\UsesGuzzler;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Response;
 
@@ -36,5 +38,19 @@ class WithHeaderTest extends TestCase
         $this->client->get('/url', [
             'headers' => $headers + ['Auth' => 'Fantastic']
         ]);
+    }
+
+    public function testWithHeadersFail()
+    {
+        $this->guzzler->queueResponse(new Response(200));
+
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageRegExp('/\bHeaders\b/');
+
+        $this->client->get('/aowieu');
+
+        $this->guzzler->assertFirst(function (Expectation $e) {
+            return $e->withHeader('X-Special', 'the value');
+        });
     }
 }

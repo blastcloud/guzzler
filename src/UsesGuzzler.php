@@ -12,7 +12,16 @@ trait UsesGuzzler
      */
     public function setUpGuzzler()
     {
-        $this->guzzler = new Guzzler($this);
+        $engine = $this->engineName();
+
+        $this->$engine = new Guzzler($this);
+    }
+
+    private function engineName()
+    {
+        return defined('self::ENGINE_NAME')
+            ? self::ENGINE_NAME
+            : 'guzzler';
     }
 
     /**
@@ -23,8 +32,9 @@ trait UsesGuzzler
      */
     public function runGuzzlerAssertions()
     {
+        $name = $this->engineName();
         (function () {
             $this->runExpectations();
-        })->call($this->guzzler);
+        })->call($this->$name);
     }
 }

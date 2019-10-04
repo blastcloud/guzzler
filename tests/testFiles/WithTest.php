@@ -2,8 +2,8 @@
 
 namespace tests\testFiles;
 
-use BlastCloud\Guzzler\Filters\Base;
-use BlastCloud\Guzzler\Interfaces\With;
+use BlastCloud\Chassis\Filters\Base;
+use BlastCloud\Chassis\Interfaces\With;
 
 class WithTest extends Base implements With
 {
