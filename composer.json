@@ -16,7 +16,7 @@
         "phpunit/phpunit": ">=7.0",
         "guzzlehttp/guzzle": ">=6.0",
         "ext-json": "*",
-        "blastcloud/chassis": "^1.0"
+        "blastcloud/chassis": "^1.0.2"
     },
     "autoload": {
         "psr-4": {

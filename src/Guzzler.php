@@ -62,15 +62,15 @@ class Guzzler extends Chassis
      * Create a new Expectation instance on which various pieces of the
      * request can be asserted against.
      *
-     * @param InvokedRecorder $argument
+     * @param mixed $argument
      * @return Expectation
      */
-    public function expects(InvokedRecorder $argument)
+    public function expects($argument)
     {
         return parent::expects($argument);
     }
 
-    protected function createExpectation(?InvokedRecorder $argument = null)
+    protected function createExpectation($argument = null)
     {
         return new Expectation($argument, $this);
     }
