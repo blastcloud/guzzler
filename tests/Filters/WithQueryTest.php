@@ -41,4 +41,36 @@ class WithQueryTest extends TestCase
             return $e->withQuery(['second' => 'another-value'], true);
         });
     }
+
+    public function testWithQueryKey()
+    {
+        $this->guzzler->queueResponse(new Response());
+
+        $this->guzzler->expects($this->once())
+            ->withQueryKey('a-special-key');
+
+        $this->client->get('/some-url?something=a-value&a-special-key');
+
+        $this->expectException(AssertionFailedError::class);
+        $this->guzzler->assertFirst(function (Expectation $e) {
+            return $e->withQueryKey('a-different-key');
+        });
+    }
+
+    public function testWithQueryKeys()
+    {
+        $this->guzzler->queueResponse(new Response());
+
+        $this->guzzler->expects($this->once())
+            ->withQueryKeys(['first', 'second']);
+
+        $this->client->get('/some-url', [
+            'query' => ['second' => 'values', 'first' => 'others']
+        ]);
+
+        $this->expectException(AssertionFailedError::class);
+        $this->guzzler->assertFirst(function (Expectation $e) {
+            return $e->withQueryKeys(['third']);
+        });
+    }
 }

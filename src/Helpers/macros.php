@@ -21,3 +21,7 @@ foreach (Expectation::VERBS as $verb) { // @codeCoverageIgnore
 Expectation::macro('endpoint', function (Expectation $e, $url, $method) {
     return $e->withEndpoint($url, strtoupper($method));
 });
+
+Expectation::macro('withoutQuery', function (Expectation $e) {
+    return $e->withQuery([], true);
+});

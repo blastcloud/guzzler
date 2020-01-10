@@ -85,6 +85,23 @@ class MacrosTest extends TestCase
         });
     }
 
+    public function testWithoutQuery()
+    {
+        $this->guzzler->queueMany(new Response(), 2);
+
+        $this->guzzler->expects($this->once())
+            ->get('/first')
+            ->withoutQuery();
+
+        $this->client->get('/first');
+        $this->client->get('/second', ['query' => ['anything' => 'its value']]);
+
+        $this->expectException(AssertionFailedError::class);
+        $this->guzzler->assertLast(function (Expectation $e) {
+            return $e->withoutQuery();
+        });
+    }
+
     public function testEachConvenienceVerbMethodDoesntErr()
     {
         $expectation = $this->guzzler->expects($this->never());
