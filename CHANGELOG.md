@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2020-01-10
+- Updating CI to test on PHP 7.4
+  - This will be the last release supporting PHP 7.1
+- Added new methods: withoutQuery, withQueryKey, and withQueryKeys
+
 ## [1.5.3] - 2019-10-03
 - Moved codebase to build on `blastcloud/chassis`. [Chassis](https://github.com/blastcloud/guzzler) is the abstracted expectation engine that was originally built for Guzzler. Now, Chassis can be used as a common base for any number of testing libraries for different PHP HTTP request clients. Check out [Hybrid](https://hybrid.guzzler.dev), a port of Guzzler for Symfony's HttpClient component.
 - Added the ability to rename the engine in test files if desired. You no longer have to have the engine named `guzzler` if you'd rather it be named something else. See the [docs here](https://guzzler.dev/getting-started/#custom-engine-name).
