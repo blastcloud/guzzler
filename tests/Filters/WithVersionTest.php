@@ -6,10 +6,11 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use tests\ExceptionMessageRegex;
 
 class WithVersionTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     public $client;
 
@@ -35,8 +36,8 @@ class WithVersionTest extends TestCase
     public function testWithBodyError()
     {
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bVersion:\b/");
-        $this->expectExceptionMessageRegExp("/\b2\b/");
+        $this->{self::$regexMethodName}("/\bVersion:\b/");
+        $this->{self::$regexMethodName}("/\b2\b/");
 
         $this->guzzler->queueResponse(new Response());
         $this->client->get('/aowei');

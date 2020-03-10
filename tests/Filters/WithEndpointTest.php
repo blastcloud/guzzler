@@ -8,10 +8,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use tests\ExceptionMessageRegex;
 
 class WithEndpointTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     /** @var Client */
     public $client;
@@ -30,7 +31,7 @@ class WithEndpointTest extends TestCase
         $this->client->get('/url');
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp('/\bPOST\b/');
+        $this->{self::$regexMethodName}('/\bPOST\b/');
 
         $this->guzzler->assertFirst(function (Expectation $e) {
             return $e->withEndpoint('/url', 'POST');

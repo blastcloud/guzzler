@@ -7,10 +7,11 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use BlastCloud\Guzzler\Expectation;
+use tests\ExceptionMessageRegex;
 
 class WithOptionTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     public $client;
 
@@ -41,7 +42,7 @@ class WithOptionTest extends TestCase
     public function testWithOptionError()
     {
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bOptions\b/");
+        $this->{self::$regexMethodName}("/\bOptions\b/");
 
         $this->guzzler->queueResponse(new Response());
         $this->client->get('/aowei');

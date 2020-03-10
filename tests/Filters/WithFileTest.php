@@ -8,10 +8,11 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use tests\ExceptionMessageRegex;
 
 class WithFileTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     const TEXT_FILE = __DIR__.'/../testFiles/test-file.txt';
     const IMG_FILE = __DIR__.'/../testFiles/blast-cloud.jpg';
@@ -29,7 +30,7 @@ class WithFileTest extends TestCase
     public function testFileThrowsExceptionForNonExistentProperty()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp("/\bsomething property does not exist\b/");
+        $this->{self::$regexMethodName}("/\bsomething property does not exist\b/");
 
         $file = new File();
         $file->something = 'aoiweuowiue';
@@ -63,41 +64,6 @@ class WithFileTest extends TestCase
             ]
         ]);
     }
-
-    /*public function testWithFileUsingStringResourceAndFileLocation()
-    {
-        $this->guzzler->queueResponse(new Response());
-        $filename = 'spikity-spockity.txt';
-
-        $this->client->post('/awoeiu', [
-            'multipart' => [
-                [
-                    'name' => 'file1',
-                    'contents' => fopen(self::TEXT_FILE, 'r'),
-                    'filename' => $filename
-                ]
-            ]
-        ]);
-
-        // File Location
-        $this->guzzler->assertLast(function (Expectation $e) {
-            return $e->withFiles([
-                'file1' => File::create([
-                    'contents' => fopen(self::TEXT_FILE, 'r')
-                ])
-            ]);
-        });
-
-        // Resource
-        $this->guzzler->assertFirst(function (Expectation $e) use ($filename) {
-            return $e->withFile('file1', File::create([
-                        'contents' => fopen(self::TEXT_FILE, 'r'),
-                        'filename' => $filename,
-                        'contentType' => 'text/plain'
-                    ])
-                );
-        });
-    }*/
 
     public function testFilesWithImageFileAndManualFileFields()
     {

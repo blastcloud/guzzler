@@ -7,10 +7,11 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use tests\ExceptionMessageRegex;
 
 class WithBodyTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     public $client;
 
@@ -63,8 +64,8 @@ class WithBodyTest extends TestCase
     public function testWithBodyError()
     {
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bBody:\b/");
-        $this->expectExceptionMessageRegExp("/\bhello\b/");
+        $this->{self::$regexMethodName}("/\bBody:\b/");
+        $this->{self::$regexMethodName}("/\bhello\b/");
 
         $this->guzzler->queueResponse(new Response());
         $this->client->get('/aowei');

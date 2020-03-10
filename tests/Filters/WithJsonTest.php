@@ -8,10 +8,11 @@ use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
+use tests\ExceptionMessageRegex;
 
 class WithJsonTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     /** @var Client */
     public $client;
@@ -40,7 +41,7 @@ class WithJsonTest extends TestCase
         ]);
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bJSON\b/");
+        $this->{self::$regexMethodName}("/\bJSON\b/");
 
         $this->client->post('/awoei', [
             'json' => $form + ['woeij' => 'aoiejw']
@@ -69,7 +70,7 @@ class WithJsonTest extends TestCase
 
         // Now Test Failure
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bJSON\b/");
+        $this->{self::$regexMethodName}("/\bJSON\b/");
 
         $this->client->post('/aweio', [
             'json' => $nestedJson

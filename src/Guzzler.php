@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use PHPUnit\Framework\{TestCase, MockObject\Matcher\InvokedRecorder};
+use PHPUnit\Framework\TestCase;
 use BlastCloud\Chassis\Chassis;
 
 class Guzzler extends Chassis

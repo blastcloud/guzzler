@@ -8,10 +8,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
+use tests\ExceptionMessageRegex;
 
 class MacrosTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     /** @var Client */
     public $client;
@@ -57,7 +58,7 @@ class MacrosTest extends TestCase
         $this->client->get('/somewhere');
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bsynchronous\b/");
+        $this->{self::$regexMethodName}("/\bsynchronous\b/");
 
         $this->guzzler->assertLast(function (Expectation $e) {
             return $e->asynchronous();
@@ -78,7 +79,7 @@ class MacrosTest extends TestCase
         $this->client->getAsync('/anywhere')->wait();
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bsynchronous\b/");
+        $this->{self::$regexMethodName}("/\bsynchronous\b/");
 
         $this->guzzler->assertLast(function (Expectation $e) {
             return $e->synchronous();

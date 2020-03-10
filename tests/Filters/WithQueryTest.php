@@ -7,10 +7,11 @@ use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Response;
 use BlastCloud\Guzzler\Expectation;
 use PHPUnit\Framework\AssertionFailedError;
+use tests\ExceptionMessageRegex;
 
 class WithQueryTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     public $client;
 
@@ -35,7 +36,7 @@ class WithQueryTest extends TestCase
         ]);
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bExclusive: true\b/");
+        $this->{self::$regexMethodName}("/\bExclusive: true\b/");
 
         $this->guzzler->assertFirst(function (Expectation $e) {
             return $e->withQuery(['second' => 'another-value'], true);

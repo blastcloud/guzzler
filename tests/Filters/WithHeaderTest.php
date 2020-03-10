@@ -7,10 +7,11 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\Psr7\Response;
+use tests\ExceptionMessageRegex;
 
 class WithHeaderTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     public $client;
 
@@ -45,7 +46,7 @@ class WithHeaderTest extends TestCase
         $this->guzzler->queueResponse(new Response(200));
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp('/\bHeaders\b/');
+        $this->{self::$regexMethodName}('/\bHeaders\b/');
 
         $this->client->get('/aowieu');
 

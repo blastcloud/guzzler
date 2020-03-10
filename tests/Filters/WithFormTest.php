@@ -8,10 +8,11 @@ use PHPUnit\Framework\TestCase;
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
+use tests\ExceptionMessageRegex;
 
 class WithFormTest extends TestCase
 {
-    use UsesGuzzler;
+    use UsesGuzzler, ExceptionMessageRegex;
 
     /** @var Client */
     public $client;
@@ -44,7 +45,7 @@ class WithFormTest extends TestCase
         });
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bForm\b/");
+        $this->{self::$regexMethodName}("/\bForm\b/");
 
         $this->guzzler->assertLast(function ($expect) {
             return $expect->withFormField('doesntexist', 'Some value');
@@ -110,7 +111,7 @@ class WithFormTest extends TestCase
         });
 
         $this->expectException(AssertionFailedError::class);
-        $this->expectExceptionMessageRegExp("/\bForm\b/");
+        $this->{self::$regexMethodName}("/\bForm\b/");
 
         $this->guzzler->assertFirst(function (Expectation $e) {
             return $e->withFormField('third', 'doesnt exist');
