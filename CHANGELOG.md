@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2020-03-09
+- Update to support PHPUnit 9
+- Drop support for PHPUnit below 8.2
+- Drop support for PHP 7.1
+
 ## [1.6.0] - 2020-01-10
 - Updating CI to test on PHP 7.4
   - This will be the last release supporting PHP 7.1
