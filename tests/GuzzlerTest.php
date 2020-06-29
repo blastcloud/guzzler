@@ -119,7 +119,11 @@ class GuzzlerTest extends TestCase
 
     public function testQueueResponseWithException()
     {
-        $exception = new BadResponseException('You suck!', new Request('GET', '/something'));
+        $exception = new BadResponseException(
+            'You suck!',
+            new Request('GET', '/something'),
+            new Response()
+        );
         $this->guzzler->queueResponse($exception);
 
         $this->expectException(BadResponseException::class);

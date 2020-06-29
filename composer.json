@@ -14,7 +14,7 @@
     "require": {
         "php": "^7.2",
         "phpunit/phpunit": ">=8.2",
-        "guzzlehttp/guzzle": "^6.0",
+        "guzzlehttp/guzzle": "^7.0",
         "ext-json": "*",
         "blastcloud/chassis": "^1.0.2"
     },
