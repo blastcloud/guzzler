@@ -1,7 +1,7 @@
 <p align="center"><img src="Guzzler-logo.svg" width="450"></p>
 <p align="center">
     <a href="https://travis-ci.org/blastcloud/guzzler">
-        <img src="https://travis-ci.org/blastcloud/guzzler.svg?branch=master">
+        <img src="https://img.shields.io/github/workflow/status/blastcloud/guzzler/run-tests?label=tests">
     </a>
     <a href="#">
         <img src="https://poser.pugx.org/blastcloud/guzzler/v/stable" />
