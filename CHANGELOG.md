@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2020-12-04
+- Testing on PHP 8.0
+- Moving unit testing to Github Actions
+
 ## [2.0.0] - 2020-06-28
 - Updated to support Guzzle 7
 
