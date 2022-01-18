@@ -1,21 +1,20 @@
-<p align="center"><img src="Guzzler-logo.svg" width="450"></p>
-<p align="center">
-    <a href="https://travis-ci.org/blastcloud/guzzler">
-        <img src="https://img.shields.io/github/workflow/status/blastcloud/guzzler/run-tests?label=tests">
-    </a>
-    <a href="#">
-        <img src="https://poser.pugx.org/blastcloud/guzzler/v/stable" />
-    </a>
-    <a href="https://packagist.org/packages/blastcloud/guzzler/stats">
-        <img src="https://poser.pugx.org/blastcloud/guzzler/downloads" />
-    </a>
-    <a href="https://codeclimate.com/github/blastcloud/guzzler/maintainability">
-        <img src="https://api.codeclimate.com/v1/badges/01c6f66eaa5db02e5411/maintainability" />
-    </a>
-    <a href="https://github.com/blastcloud/guzzler/blob/master/LICENSE.md">
-        <img src="https://poser.pugx.org/blastcloud/guzzler/license" />
-    </a>
-</p>
+<p style="text-align:center;"><img src="Guzzler-logo.svg" width="450"></p>
+
+<a href="https://travis-ci.org/blastcloud/guzzler">
+    <img src="https://img.shields.io/github/workflow/status/blastcloud/guzzler/run-tests?label=tests">
+</a>
+<a href="#">
+    <img src="https://poser.pugx.org/blastcloud/guzzler/v/stable" />
+</a>
+<a href="https://packagist.org/packages/blastcloud/guzzler/stats">
+    <img src="https://poser.pugx.org/blastcloud/guzzler/downloads" />
+</a>
+<a href="https://codeclimate.com/github/blastcloud/guzzler/maintainability">
+    <img src="https://api.codeclimate.com/v1/badges/01c6f66eaa5db02e5411/maintainability" />
+</a>
+<a href="https://github.com/blastcloud/guzzler/blob/master/LICENSE.md">
+    <img src="https://poser.pugx.org/blastcloud/guzzler/license" />
+</a>
 
 ---
 
