@@ -24,6 +24,7 @@ use BlastCloud\Chassis\Helpers\File;
  * @method $this withoutQuery()
  * @method $this withQueryKey(string $key)
  * @method $this withQueryKeys(array $keys)
+ * @method $this withRpc(string $endpoint, string $method, array $params, ?string $id)
  * @method $this withJson(array $values, bool $exclusive = false)
  * @method $this withForm(array $form, bool $exclusive = false)
  * @method $this withFormField(string $key, $value)
