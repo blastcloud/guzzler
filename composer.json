@@ -12,9 +12,9 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=8.0",
         "phpunit/phpunit": ">=8.2",
-        "guzzlehttp/guzzle": "^7.0",
+        "guzzlehttp/guzzle": "^7.4.3",
         "ext-json": "*",
         "blastcloud/chassis": "^1.0.2"
     },
