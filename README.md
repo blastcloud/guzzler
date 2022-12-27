@@ -1,6 +1,7 @@
 <p style="text-align:center;"><img src="Guzzler-logo.svg" width="450"></p>
-
-<img src="https://github.com/blastcloud/guzzler/actions/workflows/run-tests.yml/badge.svg" />
+<a href="#">
+    <img src="https://github.com/blastcloud/guzzler/actions/workflows/run-tests.yml/badge.svg" />
+</a>
 <a href="#">
     <img src="https://poser.pugx.org/blastcloud/guzzler/v/stable" />
 </a>
