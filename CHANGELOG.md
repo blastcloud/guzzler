@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.3] - 2022-12-27
+- Add support for PHP 8.2, remove support for 7.4
+- Force update to Guzzle version 7.4.3 to handle security issue.
+- Update version of Chassis, underlying engine from BlastCloud
+
 ## [2.0.2] - 2022-01-17
 - Adding a new filter `withRpc`, to ensure the request properly fits the JSONRPC spec.
   - Thanks `@webdevium` for the pull request.

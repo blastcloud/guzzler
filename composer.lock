@@ -4,25 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03daa07699f9d95aace28481ece6033e",
+    "content-hash": "6ae1765349d5da73ce4a0c8ad6f74041",
     "packages": [
         {
             "name": "blastcloud/chassis",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blastcloud/chassis.git",
-                "reference": "338c43c411031d1c3cbd24cdedf1955ebc6d849e"
+                "reference": "4c57bd53e7d67f263088db3c51aff2f1d4505ac5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blastcloud/chassis/zipball/338c43c411031d1c3cbd24cdedf1955ebc6d849e",
-                "reference": "338c43c411031d1c3cbd24cdedf1955ebc6d849e",
+                "url": "https://api.github.com/repos/blastcloud/chassis/zipball/4c57bd53e7d67f263088db3c51aff2f1d4505ac5",
+                "reference": "4c57bd53e7d67f263088db3c51aff2f1d4505ac5",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "phpunit/phpunit": ">=8.2"
             },
             "type": "library",
@@ -45,9 +45,9 @@
             "description": "A framework for building declarative HTTP client test libraries",
             "support": {
                 "issues": "https://github.com/blastcloud/chassis/issues",
-                "source": "https://github.com/blastcloud/chassis/tree/1.0.5"
+                "source": "https://github.com/blastcloud/chassis/tree/1.0.6"
             },
-            "time": "2022-01-18T05:20:49+00:00"
+            "time": "2022-12-27T18:56:20+00:00"
         },
         {
             "name": "doctrine/instantiator",
