@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         backupGlobals="false"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-    <exclude>
-      <file>./src/UndefinedIndexException.php</file>
-      <file>./src/Helpers/Extension.php</file>
-      <directory>./src/Interfaces</directory>
-    </exclude>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
+  <coverage>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
       <html outputDirectory="tests/coverage"/>
@@ -33,7 +16,17 @@
     <var name="GuzzlerMacroFile" value="tests/testFiles/macros.php"/>
   </php>
   <extensions>
-    <extension class="BlastCloud\Guzzler\Helpers\Extension"/>
+    <bootstrap class="BlastCloud\Guzzler\Helpers\Extension"/>
   </extensions>
   <logging/>
+  <source>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+    <exclude>
+      <file>./src/UndefinedIndexException.php</file>
+      <file>./src/Helpers/Extension.php</file>
+      <directory>./src/Interfaces</directory>
+    </exclude>
+  </source>
 </phpunit>

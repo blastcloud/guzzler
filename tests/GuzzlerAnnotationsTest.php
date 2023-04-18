@@ -2,6 +2,7 @@
 
 namespace tests;
 
+use BlastCloud\Guzzler\Guzzler;
 use BlastCloud\Guzzler\UsesGuzzler;
 
 class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
@@ -12,13 +13,13 @@ class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
 
     public function testWrapperIsSetupBeforeTest(): void
     {
-        $this->assertObjectHasAttribute('guzzler', $this);
+        $this->assertTrue(property_exists($this, 'guzzler'));
         $this->assertInstanceOf(\BlastCloud\Guzzler\Guzzler::class, $this->guzzler);
     }
 
     public function testExpectationsAreRunAfter()
     {
-        $this->guzzler = new Class
+        $this->guzzler = new Class($this) extends Guzzler
         {
             public function runExpectations()
             {

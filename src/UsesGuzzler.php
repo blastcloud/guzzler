@@ -4,24 +4,14 @@ namespace BlastCloud\Guzzler;
 
 trait UsesGuzzler
 {
-    /** @var Guzzler */
-    public $guzzler;
+    public Guzzler $guzzler;
 
     /**
      * @before
      */
     public function setUpGuzzler()
     {
-        $engine = $this->engineName();
-
-        $this->$engine = new Guzzler($this);
-    }
-
-    private function engineName()
-    {
-        return defined('self::ENGINE_NAME')
-            ? self::ENGINE_NAME
-            : 'guzzler';
+        $this->guzzler = new Guzzler($this);
     }
 
     /**
@@ -32,9 +22,8 @@ trait UsesGuzzler
      */
     public function runGuzzlerAssertions()
     {
-        $name = $this->engineName();
         (function () {
             $this->runExpectations();
-        })->call($this->$name);
+        })->call($this->guzzler);
     }
 }
