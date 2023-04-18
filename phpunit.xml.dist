@@ -12,7 +12,7 @@
     </testsuite>
   </testsuites>
   <php>
-    <var name="GuzzlerFilterNamespace" value="tests\testFiles"/>
+    <var name="GuzzlerFilterNamespace" value="Tests\TestFiles"/>
     <var name="GuzzlerMacroFile" value="tests/testFiles/macros.php"/>
   </php>
   <extensions>
