@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Helpers;
+namespace Tests\Helpers;
 
 use BlastCloud\Guzzler\Expectation;
 use BlastCloud\Guzzler\UsesGuzzler;
@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
-use tests\ExceptionMessageRegex;
+use Tests\ExceptionMessageRegex;
 
 class MacrosTest extends TestCase
 {

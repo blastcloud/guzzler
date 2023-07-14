@@ -1,13 +1,13 @@
 <?php
 
-namespace tests\Filters;
+namespace Tests\Filters;
 
 use BlastCloud\Guzzler\Expectation;
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
-use tests\ExceptionMessageRegex;
+use Tests\ExceptionMessageRegex;
 
 class WithBodyTest extends TestCase
 {
