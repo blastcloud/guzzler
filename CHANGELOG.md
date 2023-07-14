@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2023-07-14
+- Changes support to PHPUnit 10. This version change required which classes within PHPUnit are used. As such, any apps still using PHPUnit 9 and below should lock to 2.0.3
+- Dropping support for PHP 8.0, as PHPUnit 10 also dropped support for it.
+
 ## [2.0.3] - 2022-12-27
 - Add support for PHP 8.2, remove support for 7.4
 - Force update to Guzzle version 7.4.3 to handle security issue.

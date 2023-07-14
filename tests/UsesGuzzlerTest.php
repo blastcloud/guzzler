@@ -1,9 +1,8 @@
 <?php
 
-namespace tests;
+namespace Tests;
 
 use BlastCloud\Guzzler\UsesGuzzler;
-use BlastCloud\Guzzler\Guzzler;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
 
@@ -15,6 +14,10 @@ class UsesGuzzlerTest extends TestCase
 
     public function testBeforeAndAfterAnnotations()
     {
+        if (!method_exists(TestSuite::class, 'fromClassName')) {
+            $this->markTestSkipped();
+        }
+
         $test = TestSuite::fromClassName(GuzzlerAnnotationsTest::class);
         GuzzlerAnnotationsTest::$afterWasRun = null;
 

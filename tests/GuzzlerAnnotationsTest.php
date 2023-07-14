@@ -1,6 +1,6 @@
 <?php
 
-namespace tests;
+namespace Tests;
 
 use BlastCloud\Guzzler\Guzzler;
 use BlastCloud\Guzzler\UsesGuzzler;
