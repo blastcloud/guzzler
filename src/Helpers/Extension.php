@@ -2,7 +2,6 @@
 
 namespace BlastCloud\Guzzler\Helpers;
 
-use PHPUnit\Runner\BeforeFirstTestHook;
 use BlastCloud\Guzzler\Expectation;
 use PHPUnit\Runner\Extension\Facade;
 use PHPUnit\Runner\Extension\ParameterCollection;
