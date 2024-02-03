@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [2.1.1] - 2024-02-03
+## [2.1.2] - 2024-02-03
 - Update to support PHPUnit 11
 - Fix type hinting in macros to support both Guzzler and Hybrid use at once
 
