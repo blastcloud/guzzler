@@ -9,7 +9,7 @@ class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
 {
     use UsesGuzzler;
 
-    public static $afterWasRun;
+    public static ?string $afterWasRun;
 
     public function testWrapperIsSetupBeforeTest(): void
     {
@@ -21,7 +21,7 @@ class GuzzlerAnnotationsTest extends \PHPUnit\Framework\TestCase
     {
         $this->guzzler = new Class($this) extends Guzzler
         {
-            public function runExpectations()
+            public function runExpectations(): void
             {
                 GuzzlerAnnotationsTest::$afterWasRun = 'after has run';
             }

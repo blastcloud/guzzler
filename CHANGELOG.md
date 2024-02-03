@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2024-02-03
+- Update to support PHPUnit 11
+- Fix type hinting in macros to support both Guzzler and Hybrid use at once
+
 ## [2.1.0] - 2023-07-14
 - Changes support to PHPUnit 10. This version change required which classes within PHPUnit are used. As such, any apps still using PHPUnit 9 and below should lock to 2.0.3
 - Dropping support for PHP 8.0, as PHPUnit 10 also dropped support for it.

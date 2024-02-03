@@ -7,6 +7,7 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Tests\ExceptionMessageRegex;
 
@@ -14,8 +15,7 @@ class MacrosTest extends TestCase
 {
     use UsesGuzzler, ExceptionMessageRegex;
 
-    /** @var Client */
-    public $client;
+    public Client $client;
 
     public function setUp(): void
     {
@@ -135,9 +135,7 @@ class MacrosTest extends TestCase
         $this->assertEquals(6, $this->guzzler->queueCount());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testOverrideProvidedMacro()
     {
         Expectation::macro('synchronous', function ($e) {

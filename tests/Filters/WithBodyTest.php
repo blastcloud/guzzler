@@ -4,6 +4,7 @@ namespace Tests\Filters;
 
 use BlastCloud\Guzzler\Expectation;
 use BlastCloud\Guzzler\UsesGuzzler;
+use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +14,7 @@ class WithBodyTest extends TestCase
 {
     use UsesGuzzler, ExceptionMessageRegex;
 
-    public $client;
+    public Client $client;
 
     public function setUp(): void
     {

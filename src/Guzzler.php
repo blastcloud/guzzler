@@ -17,8 +17,8 @@ class Guzzler extends Chassis
     /** @var MockHandler */
     protected $mockHandler;
 
-    /** @var array [Expectation] */
-    protected $expectations = [];
+    /** @var Expectation[] */
+    protected array $expectations = [];
 
     public function __construct(TestCase $testInstance)
     {
@@ -35,9 +35,6 @@ class Guzzler extends Chassis
 
     /**
      * Create a client instance with the required handler stacks.
-     *
-     * @param array $options
-     * @return Client
      */
     public function getClient(array $options = []): Client
     {
@@ -50,10 +47,8 @@ class Guzzler extends Chassis
 
     /**
      * Get the handler stack to pass to a new Client instance.
-     *
-     * @return HandlerStack
      */
-    public function getHandlerStack()
+    public function getHandlerStack(): HandlerStack
     {
         return $this->handlerStack;
     }
@@ -61,16 +56,13 @@ class Guzzler extends Chassis
     /**
      * Create a new Expectation instance on which various pieces of the
      * request can be asserted against.
-     *
-     * @param mixed $argument
-     * @return Expectation
      */
-    public function expects($argument)
+    public function expects(mixed $argument): \BlastCloud\Chassis\Expectation
     {
         return parent::expects($argument);
     }
 
-    protected function createExpectation($argument = null)
+    protected function createExpectation($argument = null): \BlastCloud\Chassis\Expectation
     {
         return new Expectation($argument, $this);
     }
