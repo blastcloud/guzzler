@@ -10,7 +10,7 @@ use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 use Tests\ExceptionMessageRegex;
 
-class HelperMethodsTest extends TestCase
+class MacrosTest extends TestCase
 {
     use UsesGuzzler, ExceptionMessageRegex;
 
