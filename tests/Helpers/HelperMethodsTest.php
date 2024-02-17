@@ -7,11 +7,10 @@ use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Tests\ExceptionMessageRegex;
 
-class MacrosTest extends TestCase
+class HelperMethodsTest extends TestCase
 {
     use UsesGuzzler, ExceptionMessageRegex;
 
