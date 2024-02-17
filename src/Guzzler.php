@@ -18,7 +18,7 @@ class Guzzler extends Chassis
     protected $mockHandler;
 
     /** @var Expectation[] */
-    protected array $expectations = [];
+    protected $expectations = [];
 
     public function __construct(TestCase $testInstance)
     {

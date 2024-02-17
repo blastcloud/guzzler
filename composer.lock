@@ -4,26 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f244eb5b69611a368af0c7da80676a33",
+    "content-hash": "2ce596ab100a8ebbd5afda90d5f1dbc3",
     "packages": [
         {
             "name": "blastcloud/chassis",
-            "version": "1.0.10",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blastcloud/chassis.git",
-                "reference": "1cdc4bfec74fcf89d13034965321229b45686008"
+                "reference": "e50a83440f5f217b55b65f884fde493979378c3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blastcloud/chassis/zipball/1cdc4bfec74fcf89d13034965321229b45686008",
-                "reference": "1cdc4bfec74fcf89d13034965321229b45686008",
+                "url": "https://api.github.com/repos/blastcloud/chassis/zipball/e50a83440f5f217b55b65f884fde493979378c3c",
+                "reference": "e50a83440f5f217b55b65f884fde493979378c3c",
                 "shasum": ""
             },
-            "require-dev": {
+            "require": {
                 "ext-json": "*",
                 "php": ">=8.1",
-                "phpunit/phpunit": ">=10.0"
+                "phpunit/phpunit": ">=9.0"
             },
             "type": "library",
             "autoload": {
@@ -45,9 +45,9 @@
             "description": "A framework for building declarative HTTP client test libraries",
             "support": {
                 "issues": "https://github.com/blastcloud/chassis/issues",
-                "source": "https://github.com/blastcloud/chassis/tree/1.0.10"
+                "source": "https://github.com/blastcloud/chassis/tree/1.1.0"
             },
-            "time": "2024-02-03T11:03:02+00:00"
+            "time": "2024-02-17T21:36:08+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -927,16 +927,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.0.1",
+            "version": "11.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "f6a1f7cf2b636e5a3f0727494d5632939ae9a643"
+                "reference": "de24e7e7c67fbf437f7b6cd7bc919f2dc6fd89d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f6a1f7cf2b636e5a3f0727494d5632939ae9a643",
-                "reference": "f6a1f7cf2b636e5a3f0727494d5632939ae9a643",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/de24e7e7c67fbf437f7b6cd7bc919f2dc6fd89d4",
+                "reference": "de24e7e7c67fbf437f7b6cd7bc919f2dc6fd89d4",
                 "shasum": ""
             },
             "require": {
@@ -1007,7 +1007,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.0.1"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.0.3"
             },
             "funding": [
                 {
@@ -1023,7 +1023,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-02T16:36:03+00:00"
+            "time": "2024-02-10T06:31:16+00:00"
         },
         {
             "name": "psr/http-client",
@@ -2281,5 +2281,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

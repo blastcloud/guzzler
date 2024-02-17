@@ -135,7 +135,10 @@ class MacrosTest extends TestCase
         $this->assertEquals(6, $this->guzzler->queueCount());
     }
 
-    #[RunInSeparateProcess]
+    /**
+     * @runInSeparateProcess
+     * @return void
+     */
     public function testOverrideProvidedMacro()
     {
         Expectation::macro('synchronous', function ($e) {
