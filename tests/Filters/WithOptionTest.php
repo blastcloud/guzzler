@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Filters;
+namespace Tests\Filters;
 
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Psr7\Response;

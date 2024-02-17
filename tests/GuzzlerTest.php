@@ -1,6 +1,6 @@
 <?php
 
-namespace tests;
+namespace Tests;
 
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Promise\Promise;

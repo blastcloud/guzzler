@@ -8,7 +8,6 @@ use BlastCloud\Guzzler\Traits\RecursiveSort;
 
 class WithJson extends Base implements With
 {
-
     use RecursiveSort;
 
     /** @var string */

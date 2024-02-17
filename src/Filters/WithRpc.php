@@ -11,7 +11,6 @@ use Psr\Http\Message\UriInterface;
 
 class WithRpc extends Base implements With
 {
-
     use RecursiveSort;
 
     const JSON_RPC_VERSION = '2.0';

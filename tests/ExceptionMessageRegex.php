@@ -1,6 +1,6 @@
 <?php
 
-namespace tests;
+namespace Tests;
 
 trait ExceptionMessageRegex
 {
