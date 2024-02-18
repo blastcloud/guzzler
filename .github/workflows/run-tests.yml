@@ -21,6 +21,8 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - uses: php-actions/composer@v6
+              with:
+                  php_version: ${{ matrix.php }}
             - name: PHPUnit Tests
               uses: php-actions/phpunit@v3
               with:
