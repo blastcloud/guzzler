@@ -2,7 +2,6 @@
 
 namespace Tests\Filters;
 
-
 use BlastCloud\Guzzler\UsesGuzzler;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;

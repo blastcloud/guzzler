@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\testFiles;
+namespace Tests\TestFiles;
 
 use BlastCloud\Guzzler\Filters\WithBody as Base;
 use BlastCloud\Chassis\Interfaces\With;

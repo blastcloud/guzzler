@@ -13,7 +13,7 @@
   </testsuites>
   <php>
     <var name="GuzzlerFilterNamespace" value="Tests\TestFiles"/>
-    <var name="GuzzlerMacroFile" value="tests/testFiles/macros.php"/>
+    <var name="GuzzlerMacroFile" value="tests/TestFiles/macros.php"/>
   </php>
   <extensions>
     <bootstrap class="BlastCloud\Guzzler\Helpers\Extension"/>
@@ -26,7 +26,6 @@
     <exclude>
       <file>./src/UndefinedIndexException.php</file>
       <file>./src/Helpers/Extension.php</file>
-      <directory>./src/Interfaces</directory>
     </exclude>
   </source>
 </phpunit>
