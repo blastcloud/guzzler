@@ -20,16 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "BlastCloud\\Guzzler\\": "src/"
+            "BlastCloud\\Guzzler\\": "src/",
+            "Tests\\": "tests/"
         },
         "files": [
             "src/Helpers/macros.php"
         ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
     },
     "prefer-stable": true,
     "require-dev": {
