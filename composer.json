@@ -27,5 +27,10 @@
             "src/Helpers/macros.php"
         ]
     },
+    "autoload-dev": {
+        "files": [
+            "tests/testFiles/macros.php"
+        ]
+    },
     "prefer-stable": true
 }
