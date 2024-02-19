@@ -17,9 +17,6 @@ class Guzzler extends Chassis
     /** @var MockHandler */
     protected $mockHandler;
 
-    /** @var Expectation[] */
-    protected $expectations = [];
-
     public function __construct(TestCase $testInstance)
     {
         parent::__construct($testInstance);
