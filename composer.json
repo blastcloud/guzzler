@@ -20,8 +20,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BlastCloud\\Guzzler\\": "src/",
-            "Tests\\": "tests/"
+            "BlastCloud\\Guzzler\\": "src",
+            "Tests\\": "tests"
         },
         "files": [
             "src/Helpers/macros.php"
