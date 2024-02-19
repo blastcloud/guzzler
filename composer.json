@@ -27,7 +27,5 @@
             "src/Helpers/macros.php"
         ]
     },
-    "prefer-stable": true,
-    "require-dev": {
-    }
+    "prefer-stable": true
 }
