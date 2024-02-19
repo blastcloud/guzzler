@@ -14,8 +14,8 @@ class WithFileTest extends TestCase
 {
     use UsesGuzzler, ExceptionMessageRegex;
 
-    const TEXT_FILE = __DIR__.'/../testFiles/test-file.txt';
-    const IMG_FILE = __DIR__.'/../testFiles/blast-cloud.jpg';
+    const TEXT_FILE = __DIR__ . '/../TestFiles/test-file.txt';
+    const IMG_FILE = __DIR__ . '/../TestFiles/blast-cloud.jpg';
 
     /** @var Client */
     public $client;
