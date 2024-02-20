@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2024-02-19
+- Add support back for PHPUnit 9.6 and PHP 8.1. Now includes support for the following combinations:
+
+| PHP | PHPUnit     |
+|-----|-------------|
+| 8.1 | 9.6, 10     |
+| 8.2 | 9.6, 10, 11 |
+| 8.3 | 9.6, 10, 11 |
+
 ## [2.1.2] - 2024-02-03
 - Update to support PHPUnit 11
 - Fix type hinting in macros to support both Guzzler and Hybrid use at once
