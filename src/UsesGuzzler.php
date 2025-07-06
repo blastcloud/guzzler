@@ -11,6 +11,7 @@ trait UsesGuzzler
 
     /**
      * @return void
+     * @before
      */
     #[Before]
     public function setUpGuzzler()
@@ -22,6 +23,7 @@ trait UsesGuzzler
      * Run through the list of expectations that were made and
      * evaluate all requests in the history. Closure::call()
      * is used to hide this method from the user APIs.
+     * @after
      */
     #[After]
     public function runGuzzlerAssertions(): void

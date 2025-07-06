@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 | 8.1 | 9.6, 10     |
 | 8.2 | 9.6, 10, 11 |
 | 8.3 | 9.6, 10, 11 |
+| 8.4 | 10, 11, 12  |
+
+## [2.2.0] - 2025-07-05
+- Add support for PHPUnit 12 and PHP 8.4
 
 ## [2.1.2] - 2024-02-03
 - Update to support PHPUnit 11
