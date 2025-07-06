@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f6ea82e579fe2f4592932563b10b02c",
+    "content-hash": "b845568a9003608aef88f30e61619bc6",
     "packages": [
         {
             "name": "blastcloud/chassis",
