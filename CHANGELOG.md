@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2025-07-05
+- Add support for PHPUnit 12, and PHP 8.4  Current version support is shown in table below.
+
+| PHP | PHPUnit         |
+|-----|-----------------|
+| 8.1 | 9.6, 10         |
+| 8.2 | 9.6, 10, 11     |
+| 8.3 | 9.6, 10, 11     |
+| 8.4 | 9.6, 10, 11, 12 |
+
 ## [2.2.0] - 2024-02-19
 - Add support back for PHPUnit 9.6 and PHP 8.1. Now includes support for the following combinations:
 
@@ -9,7 +19,6 @@ All notable changes to this project will be documented in this file.
 | 8.1 | 9.6, 10     |
 | 8.2 | 9.6, 10, 11 |
 | 8.3 | 9.6, 10, 11 |
-| 8.4 | 10, 11, 12  |
 
 ## [2.2.0] - 2025-07-05
 - Add support for PHPUnit 12 and PHP 8.4
